@@ -30,7 +30,7 @@ def make_param_files(data_directory, idx, closest_ts, B, C, dataset, a):
             ds = calc_snow_index_to_snow_depth(ds, C = c)
 
             sub = ds.sel(time = closest_ts)
-            spicy_sd = sub['lidar-sd'].values.ravel()[idx]
+            spicy_sd = sub['snow_depth'].values.ravel()[idx]
             # print(f'Saving {a}_{b}_{c}.npy')
             np.save(data_directory.joinpath(f'{a}_{b}_{c}.npy'), spicy_sd)
 
