@@ -7,13 +7,12 @@ import matplotlib.pyplot as plt
 from pathlib import Path
 from multiprocessing import Pool
 from functools import partial
+from datetime import datetime
 
 from spicy_snow.processing.snow_index import calc_delta_cross_ratio, calc_delta_gamma, \
     clip_delta_gamma_outlier, calc_snow_index, calc_snow_index_to_snow_depth
 from spicy_snow.processing.wet_snow import id_newly_wet_snow, id_wet_negative_si, \
     id_newly_frozen_snow, flag_wet_snow
-
-
 
 def make_param_files(data_directory, idx, closest_ts, B, C, dataset, a):
     ds = dataset
@@ -36,30 +35,28 @@ def make_param_files(data_directory, idx, closest_ts, B, C, dataset, a):
             np.save(data_directory.joinpath(f'{a}_{b}_{c}.npy'), spicy_sd)
 
 # Create parameter space
-A = np.round(np.arange(1, 3.1, 0.5), 2)
+A = np.round(np.arange(1, 3.1, 0.1), 2)
 B = np.round(np.arange(0, 1.01, 0.1), 2)
 C = np.round(np.arange(0, 1.001, 0.01), 2)
 
-files = list(Path('/bsuhome/zacharykeskinen/scatch/spicy/SnowEx-Data/').glob('*.nc'))
-
-files = [f for f in files if '.fix.nc' in f.name]
+spicy_netcdfs = list(Path('/bsuhome/zacharykeskinen/scratch/spicy/SnowEx-Data/').glob('*.nc'))
 
 param_dir = Path('~/scratch/spicy/param_npys').expanduser()
 
 param_dir.mkdir(exist_ok = True)
 
-for f in files:
+for spicy_nc in spicy_netcdfs:
     # get dataset
-    ds_name = f.name.split('stacks/')[-1].split('.')[0]
+    ds_name = spicy_nc.name.split('stacks/')[-1].split('.')[0]
     print(datetime.now(), f' -- starting {ds_name}')
-    ds_ = xr.open_dataset(f).load()
-    dataset = ds_[['s1','deltaVV','ims','fcf', 'lidar-sd', 'dem', 'snow_depth']]
+    ds_ = xr.open_dataset(spicy_nc).load()
+    dataset = ds_[['s1','deltaVV','ims','fcf', 'lidar-sd', 'lidar-dem', 'snow_depth']]
 
     # find closest timestep to lidar
     td = abs(pd.to_datetime(dataset.time) - pd.to_datetime(dataset.attrs['lidar-flight-time']))
     closest_ts = dataset.time[np.argmin(td)]
 
-    if 'Frasier_2020-02-11' in f.name:
+    if 'Frasier_2020-02-11' in spicy_nc.name:
         closest_ts = '2020-02-16T13:09:43.000000000'
 
     ds_dir = param_dir.joinpath(ds_name)
@@ -67,7 +64,7 @@ for f in files:
     ds_dir.mkdir(exist_ok = True)
 
     trees = dataset['fcf'].values.ravel()
-    elev = dataset['dem'].values.ravel()
+    elev = dataset['lidar-dem'].values.ravel()
     lidar = dataset['lidar-sd'].values.ravel()
     spicy_sd = dataset['snow_depth'].sel(time = closest_ts).values.ravel()
 
