@@ -36,7 +36,7 @@ def make_param_files(data_directory, idx, closest_ts, B, C, dataset, a):
 
 # Create parameter space
 A = np.round(np.arange(1, 3.1, 0.1), 2)
-B = np.round(np.arange(0, 1.01, 0.1), 2)
+B = np.round(np.arange(0, 2.01, 0.1), 2)
 C = np.round(np.arange(0, 1.001, 0.01), 2)
 
 spicy_netcdfs = list(Path('/bsuhome/zacharykeskinen/scratch/spicy/SnowEx-Data/').glob('*.nc'))

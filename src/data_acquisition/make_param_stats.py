@@ -35,7 +35,6 @@ def make_stat_da(iter_num, loc_fp):
     param_fps = list(param_fp.glob('*'))[0]
     stems= [f.stem for f in list(param_fps.glob('*_*_*.npy'))]
 
-    # slicing for testing only...
     A = np.unique([float(s.split('_')[0]) for s in stems])
     B = np.unique([float(s.split('_')[1]) for s in stems])
     C = np.unique([float(s.split('_')[2]) for s in stems])
@@ -51,7 +50,7 @@ def make_stat_da(iter_num, loc_fp):
     elev = np.load(loc_fp.joinpath('elev.npy'))
     trees = np.load(loc_fp.joinpath('trees.npy'))
 
-    idx = (trees < 0.5) & (elev > 2000)
+    idx = (trees < 0.8) & (elev > 2000)
 
     if 'Cottonwood' in loc_fp.stem:
         print(f"Size of datarray: {res_ds['pearsonr'].data.shape}")
@@ -63,8 +62,11 @@ def make_stat_da(iter_num, loc_fp):
         combo = np.vstack([lidar_orig, sds_orig])
         combo = combo.T[idx].T
         for iter in iterations:
-            id_iter = np.random.choice(combo.shape[1], combo.shape[1], replace = True)
-            sds, lidar = combo.T[id_iter].T
+            if iter != 0:
+                id_iter = np.random.choice(combo.shape[1], combo.shape[1], replace = True)
+                sds, lidar = combo.T[id_iter].T
+            else:
+                sds, lidar = combo
             r, mean_error, rmse, bias = get_stats(lidar, sds)
             res_ds['pearsonr'].loc[dict(location = loc_fp.stem, A = a, B = b, C = c, iteration = iter)] = r
             res_ds['mae'].loc[dict(location = loc_fp.stem, A = a, B = b, C = c, iteration = iter)] = mean_error
