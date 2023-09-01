@@ -163,3 +163,5 @@ slurms/
 logs/
 
 *.nc
+
+*.nfs

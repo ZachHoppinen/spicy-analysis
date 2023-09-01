@@ -66,6 +66,11 @@ def make_site_ds(site: str, lidar_dir: Path) -> xr.Dataset:
     
     return dataset
 
+param_set = Path('/bsuhome/zacharykeskinen/spicy-analysis/results/params/stat_res_0.5tree.csv')
+param_df = pd.DataFrame()
+if param_set.exists():
+    param_df = pd.read_csv(param_set, index_col = 0)
+
 for site, site_name in sites.items():
     print(''.center(40, '-'))
     print(f'Starting {site_name}')
@@ -77,9 +82,15 @@ for site, site_name in sites.items():
     area = shapely.geometry.box(*lidar_ds_site.rio.bounds())
 
     for date in lidar_ds_site.time:
-        Path('/bsuhome/zacharykeskinen/scratch/spicy/SnowEx-Data/').mkdir(exist_ok = True)
-        out_nc = Path(f'/bsuhome/zacharykeskinen/scratch/spicy/SnowEx-Data/{site_name}_{(date).dt.strftime("%Y-%m-%d").values}.nc')
 
+        if param_df.size > 0:
+            out_dir = Path('/bsuhome/zacharykeskinen/scratch/spicy/SnowEx-Data-params/')
+        else:
+            out_dir = Path('/bsuhome/zacharykeskinen/scratch/spicy/SnowEx-Data/')
+        
+        out_nc = out_dir.joinpath(f'{site_name}_{(date).dt.strftime("%Y-%m-%d").values}.nc')
+
+        out_dir.mkdir(exist_ok = True)
         if out_nc.exists():
             print(f'Outfile {out_nc} exists already.')
             continue
@@ -93,7 +104,12 @@ for site, site_name in sites.items():
 
         dates = get_input_dates(date.data + pd.Timedelta('14 day'))
 
-        spicy_ds = retrieve_snow_depth(area = area, dates = dates, work_dir = '/bsuhome/zacharykeskinen/scratch/spicy/', job_name = f'spicy_{site}_{dates[1]}', existing_job_name = f'spicy_{site}_{dates[1]}')
+        if param_df.size > 0:
+            spicy_ds = retrieve_snow_depth(area = area, dates = dates, work_dir = '/bsuhome/zacharykeskinen/scratch/spicy/', \
+                                           job_name = f'spicy_{site}_{dates[1]}', existing_job_name = f'spicy_{site}_{dates[1]}'\
+                                            params = list(param_df.loc[out_nc.stem, ['A','B', 'C']]))
+        else:    
+            spicy_ds = retrieve_snow_depth(area = area, dates = dates, work_dir = '/bsuhome/zacharykeskinen/scratch/spicy/', job_name = f'spicy_{site}_{dates[1]}', existing_job_name = f'spicy_{site}_{dates[1]}')
 
         lidar_ds = lidar_ds.rio.reproject_match(spicy_ds)
 
