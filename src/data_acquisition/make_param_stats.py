@@ -50,7 +50,7 @@ def make_stat_da(iter_num, loc_fp):
     elev = np.load(loc_fp.joinpath('elev.npy'))
     trees = np.load(loc_fp.joinpath('trees.npy'))
 
-    idx = (trees < 0.8) & (elev > 2000)
+    idx = (trees < 0.1) & (elev > 2000)
 
     if 'Cottonwood' in loc_fp.stem:
         print(f"Size of datarray: {res_ds['pearsonr'].data.shape}")
@@ -79,7 +79,7 @@ def make_stat_da(iter_num, loc_fp):
     res_ds.to_netcdf(loc_fp.parent.joinpath('stats_ncs', loc_fp.stem + '_stats.nc'))
 
 
-out_fp = Path('/bsuhome/zacharykeskinen/scratch/spicy/param_stats.nc')
+out_fp = Path('/bsuhome/zacharykeskinen/scratch/spicy/param_stats_notrees.nc')
 
 if out_fp.exists():
     print('Already exists...')
