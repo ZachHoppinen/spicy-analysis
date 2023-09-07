@@ -65,11 +65,6 @@ def make_site_ds(site: str, lidar_dir: Path) -> xr.Dataset:
     
     return dataset
 
-param_set = Path('/bsuhome/zacharykeskinen/scratch/spicy/param_npys/param_stats.nc')
-param_df = pd.DataFrame()
-if param_set.exists():
-    param_df = pd.read_csv(param_set, index_col = 0)
-
 for site, site_name in sites.items():
     print(''.center(40, '-'))
     print(f'Starting {site_name}')
@@ -81,13 +76,11 @@ for site, site_name in sites.items():
     area = shapely.geometry.box(*lidar_ds_site.rio.bounds())
 
     for date in lidar_ds_site.time:
-        if pd.to_datetime(date).year != 2021:
+        if '2021' not in str(date.values.ravel()[0]):
             continue
 
-        if param_df.size > 0:
-            out_dir = Path('/bsuhome/zacharykeskinen/scratch/spicy/wet_banner/')
-        else:
-            out_dir = Path('/bsuhome/zacharykeskinen/scratch/spicy/SnowEx-Data/')
+        out_dir = Path('/bsuhome/zacharykeskinen/scratch/spicy/wet_banner/')
+    
         
         out_nc = out_dir.joinpath(f'{site_name}_{(date).dt.strftime("%Y-%m-%d").values}.nc')
 
@@ -103,14 +96,11 @@ for site, site_name in sites.items():
 
         lidar_ds = lidar_ds_site.sel(time = date)
 
-        dates = get_input_dates('2021-07-30')
+        dates = get_input_dates('2021-07-31', '2020-08-01')
 
-        if param_df.size > 0:
-            spicy_ds = retrieve_snow_depth(area = area, dates = dates, work_dir = '/bsuhome/zacharykeskinen/scratch/spicy/', \
+        spicy_ds = retrieve_snow_depth(area = area, dates = dates, work_dir = '/bsuhome/zacharykeskinen/scratch/spicy/', \
                                            job_name = f'spicy_{site}_{dates[1]}', existing_job_name = f'spicy_{site}_{dates[1]}', \
-                                            params = [1.1, 2.0, 0.39], freeze_thresh = 1)
-        else:    
-            spicy_ds = retrieve_snow_depth(area = area, dates = dates, work_dir = '/bsuhome/zacharykeskinen/scratch/spicy/', job_name = f'spicy_{site}_{dates[1]}', existing_job_name = f'spicy_{site}_{dates[1]}')
+                                            params = [1.1, 2.0, 0.39], freezing_snow_thresh = 1)
 
         lidar_ds = lidar_ds.rio.reproject_match(spicy_ds)
 
