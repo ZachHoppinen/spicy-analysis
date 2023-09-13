@@ -71,7 +71,7 @@ for site, site_name in sites.items():
 
     lidar_ds_site = make_site_ds(site, lidar_dir = lidar_dir)
 
-    lidar_ds_site = lidar_ds_site.where(lidar_ds_site < 1e9).where(lidar_ds_site >= 0)
+    # lidar_ds_site = lidar_ds_site.where(lidar_ds_site < 1e9).where(lidar_ds_site >= 0)
 
     area = shapely.geometry.box(*lidar_ds_site.rio.bounds())
 
