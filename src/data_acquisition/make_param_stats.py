@@ -28,17 +28,15 @@ def get_stats(a, b):
     return r, error, rmse, bias
 
 
-def make_stat_da(loc_fp, tree_idx_low, tree_idx_high):
+def make_stat_da(tree_idx_low, tree_idx_high, loc_fp):
     
     print(f'Starting {loc_fp.stem}...')
 
-    param_fps = list(param_fp.glob('*'))[0]
-    stems= [f.stem for f in list(param_fps.glob('*_*_*.npy'))]
+    stems= [f.stem for f in list(loc_fp.glob('*_*_*.npy'))]
 
     A = np.unique([float(s.split('_')[0]) for s in stems])
     B = np.unique([float(s.split('_')[1]) for s in stems])
     C = np.unique([float(s.split('_')[2]) for s in stems])
-
 
     res = np.zeros((1, len(A), len(B), len(C)))
 
@@ -62,15 +60,16 @@ def make_stat_da(loc_fp, tree_idx_low, tree_idx_high):
 
         sds, lidar = combo
         r, mean_error, rmse, bias = get_stats(lidar, sds)
-        res_ds['pearsonr'].loc[dict(location = loc_fp.stem, A = a, B = b, C = c, iteration = iter)] = r
-        res_ds['mae'].loc[dict(location = loc_fp.stem, A = a, B = b, C = c, iteration = iter)] = mean_error
-        res_ds['rmse'].loc[dict(location = loc_fp.stem, A = a, B = b, C = c, iteration = iter)] = rmse
-        res_ds['bias'].loc[dict(location = loc_fp.stem, A = a, B = b, C = c, iteration = iter)] = bias
+        res_ds['pearsonr'].loc[dict(location = loc_fp.stem, A = a, B = b, C = c)] = r
+        res_ds['mae'].loc[dict(location = loc_fp.stem, A = a, B = b, C = c)] = mean_error
+        res_ds['rmse'].loc[dict(location = loc_fp.stem, A = a, B = b, C = c)] = rmse
+        res_ds['bias'].loc[dict(location = loc_fp.stem, A = a, B = b, C = c)] = bias
     
-    print(f'Finishing {loc_fp.stem}!')
     for dv in res_ds.data_vars:
         res_ds[dv] = res_ds[dv].astype(float)
     res_ds.to_netcdf(loc_fp.parent.joinpath('stats_ncs', loc_fp.stem + f'{tree_idx_low}_{tree_idx_high}_stats.nc'))
+
+    print(f'Finishing {loc_fp.stem}!')
 
 
 param_fp = Path('/bsuhome/zacharykeskinen/scratch/spicy/param_npys')
