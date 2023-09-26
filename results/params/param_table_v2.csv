@@ -1,0 +1,7 @@
+,All Pixels,<25% FCF,>75% FCF
+$\delta rmse / \delta$ A,0.195,0.406,0.139
+$\delta rmse / \delta$ B,0.167,0.015,0.344
+$\delta rmse / \delta$ C,0.860,1.702,0.402
+$\delta pearsonr / \delta$ A,0.028,0.042,0.018
+$\delta pearsonr / \delta$ B,0.082,0.011,0.153
+$\delta pearsonr / \delta$ C,0.000,0.000,0.000

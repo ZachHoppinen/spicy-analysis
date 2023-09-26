@@ -67,7 +67,7 @@ def make_stat_da(tree_idx_low, tree_idx_high, loc_fp):
     
     for dv in res_ds.data_vars:
         res_ds[dv] = res_ds[dv].astype(float)
-    res_ds.to_netcdf(loc_fp.parent.joinpath('stats_ncs', loc_fp.stem + f'{tree_idx_low}_{tree_idx_high}_stats.nc'))
+    res_ds.to_netcdf(loc_fp.parent.joinpath('stats_ncs', loc_fp.stem + f'_{tree_idx_low:.2f}_{tree_idx_high:.2f}_stats.nc'))
 
     print(f'Finishing {loc_fp.stem}!')
 
@@ -85,19 +85,19 @@ if out_fp.exists():
 pool = Pool()
     
 pool.map(partial(make_stat_da, 0, 1), param_fp.glob('*_*-*-*'))
-das = [xr.open_dataset(fp) for fp in param_fp.joinpath('stats_ncs').glob('*0_1_stats.nc')]
+das = [xr.open_dataset(fp) for fp in param_fp.joinpath('stats_ncs').glob('*0.00_1.00_stats.nc')]
 ds = xr.merge(das)
 ds.to_netcdf(param_fp.joinpath('param_stats_all.nc'))
 
 pool = Pool()
 pool.map(partial(make_stat_da, 0, 0.25), param_fp.glob('*_*-*-*'))
-das = [xr.open_dataset(fp) for fp in param_fp.joinpath('stats_ncs').glob('*0_0.25_stats.nc')]
+das = [xr.open_dataset(fp) for fp in param_fp.joinpath('stats_ncs').glob('*0.00_0.25_stats.nc')]
 ds = xr.merge(das)
 ds.to_netcdf(param_fp.joinpath('param_stats_low_fcf.nc'))
 
 pool = Pool()
 pool.map(partial(make_stat_da, 0.75, 1), param_fp.glob('*_*-*-*'))
-das = [xr.open_dataset(fp) for fp in param_fp.joinpath('stats_ncs').glob('*0_0.25_stats.nc')]
+das = [xr.open_dataset(fp) for fp in param_fp.joinpath('stats_ncs').glob('*0.75_1.00_stats.nc')]
 ds = xr.merge(das)
 ds.to_netcdf(param_fp.joinpath('param_stats_high_fcf.nc'))
 
