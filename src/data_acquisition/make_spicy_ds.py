@@ -3,6 +3,8 @@ from pathlib import Path
 import pandas as pd
 import xarray as xr
 import rioxarray as rxa
+from rasterio.enums import Resampling
+
 from datetime import datetime
 
 from spicy_snow.retrieval import retrieve_snow_depth
@@ -66,10 +68,10 @@ def make_site_ds(site: str, lidar_dir: Path) -> xr.Dataset:
     
     return dataset
 
-param_set = Path('/bsuhome/zacharykeskinen/spicy-analysis/results/params/stat_res_0.5tree.csv')
-param_df = pd.DataFrame()
-if param_set.exists():
-    param_df = pd.read_csv(param_set, index_col = 0)
+# param_set = Path('/bsuhome/zacharykeskinen/spicy-analysis/results/params/stat_res_0.5tree.csv')
+# param_df = pd.DataFrame()
+# if param_set.exists():
+#     param_df = pd.read_csv(param_set, index_col = 0)
 
 for site, site_name in sites.items():
     print(''.center(40, '-'))
@@ -104,14 +106,14 @@ for site, site_name in sites.items():
 
         dates = get_input_dates(date.data + pd.Timedelta('14 day'))
 
-        if param_df.size > 0:
-            spicy_ds = retrieve_snow_depth(area = area, dates = dates, work_dir = '/bsuhome/zacharykeskinen/scratch/spicy/', \
-                                           job_name = f'spicy_{site}_{dates[1]}', existing_job_name = f'spicy_{site}_{dates[1]}', \
-                                            params = list(param_df.loc[out_nc.stem, ['A','B', 'C']]))
-        else:    
-            spicy_ds = retrieve_snow_depth(area = area, dates = dates, work_dir = '/bsuhome/zacharykeskinen/scratch/spicy/', job_name = f'spicy_{site}_{dates[1]}', existing_job_name = f'spicy_{site}_{dates[1]}')
+        # if param_df.size > 0:
+        spicy_ds = retrieve_snow_depth(area = area, dates = dates, work_dir = '/bsuhome/zacharykeskinen/scratch/spicy/', \
+                                        job_name = f'spicy_{site}_{dates[1]}', existing_job_name = f'spicy_{site}_{dates[1]}', \
+                                        params = [1.5, 0.1, 0.59])
+        # else:    
+            # spicy_ds = retrieve_snow_depth(area = area, dates = dates, work_dir = '/bsuhome/zacharykeskinen/scratch/spicy/', job_name = f'spicy_{site}_{dates[1]}', existing_job_name = f'spicy_{site}_{dates[1]}')
 
-        lidar_ds = lidar_ds.rio.reproject_match(spicy_ds)
+        lidar_ds = lidar_ds.rio.reproject_match(spicy_ds, resampling = Resampling.average)
 
         ds = xr.merge([spicy_ds, lidar_ds], combine_attrs = 'drop_conflicts')
 
