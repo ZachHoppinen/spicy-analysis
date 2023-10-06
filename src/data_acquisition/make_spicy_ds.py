@@ -85,14 +85,14 @@ for site, site_name in sites.items():
 
     for date in lidar_ds_site.time:
 
-        if param_df.size > 0:
-            out_dir = Path('/bsuhome/zacharykeskinen/scratch/spicy/SnowEx-Data-params/')
-        else:
-            out_dir = Path('/bsuhome/zacharykeskinen/scratch/spicy/SnowEx-Data/')
+        # if param_df.size > 0:
+        #     out_dir = Path('/bsuhome/zacharykeskinen/scratch/spicy/SnowEx-Data-params/')
+        # else:
+        out_dir = Path('/bsuhome/zacharykeskinen/scratch/spicy/SnowEx-Data-lave/')
+        out_dir.mkdir(exist_ok = True)
         
         out_nc = out_dir.joinpath(f'{site_name}_{(date).dt.strftime("%Y-%m-%d").values}.nc')
 
-        out_dir.mkdir(exist_ok = True)
         if out_nc.exists():
             print(f'Outfile {out_nc} exists already.')
             continue
