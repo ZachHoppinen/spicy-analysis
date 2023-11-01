@@ -1,5 +1,6 @@
 import shapely
 from pathlib import Path
+import numpy as np
 import pandas as pd
 import xarray as xr
 import rioxarray as rxa
@@ -113,7 +114,9 @@ for site, site_name in sites.items():
         # else:    
             # spicy_ds = retrieve_snow_depth(area = area, dates = dates, work_dir = '/bsuhome/zacharykeskinen/scratch/spicy/', job_name = f'spicy_{site}_{dates[1]}', existing_job_name = f'spicy_{site}_{dates[1]}')
 
-        lidar_ds = lidar_ds.rio.reproject_match(spicy_ds, resampling = Resampling.average)
+        for var in lidar_ds:
+            lidar_ds[var] = lidar_ds[var].rio.write_nodata(np.nan)
+        lidar_ds = lidar_ds.rio.reproject_match(spicy_ds, resampling = Resampling.average, nodata=np.nan)
 
         ds = xr.merge([spicy_ds, lidar_ds], combine_attrs = 'drop_conflicts')
 
