@@ -42,11 +42,31 @@ da = xr.DataArray(np.zeros((len(A), len(B), len(C))) , coords = [A, B, C], dims 
 res = xr.merge([da, da.copy().rename('mae'), da.copy().rename('rmse'), da.copy().rename('bias')])
 
 loc_dirs = list(npy_dirs.glob('*_*-*-*'))
+# for a, b, c in product(A, B, C):
+#     spicy = [np.load(fp.joinpath(f'{a}_{b}_{c}.npy')) for fp in loc_dirs]
+#     spicy = np.concatenate(spicy)
+#     r, bias, mae, rmse = get_stats(sds, spicy)
+#     for name, var in zip(['pearsonr', 'mae', 'rmse', 'bias'], [r, mae, rmse, bias]):
+#         res[name].loc[dict(A = a, B = b, C = c)] = var
+
+# res.to_netcdf(npy_dirs.joinpath('grouped.nc'))
+
+# dry only
+sds = []
+for fp in loc_dirs:
+    wet = np.load(fp.joinpath('wet.npy'))
+    sds.append(np.load(Path(fp).joinpath('lidar.npy'))[wet == 0])
+sds = np.concatenate(sds)
+
+
 for a, b, c in product(A, B, C):
-    spicy = [np.load(fp.joinpath(f'{a}_{b}_{c}.npy')) for fp in loc_dirs]
+    spicy = []
+    for fp in loc_dirs:
+        wet = np.load(fp.joinpath('wet.npy'))
+        spicy.append(np.load(fp.joinpath(f'{a}_{b}_{c}.npy'))[wet == 0])
     spicy = np.concatenate(spicy)
     r, bias, mae, rmse = get_stats(sds, spicy)
     for name, var in zip(['pearsonr', 'mae', 'rmse', 'bias'], [r, mae, rmse, bias]):
         res[name].loc[dict(A = a, B = b, C = c)] = var
 
-res.to_netcdf(npy_dirs.joinpath('grouped.nc'))
+res.to_netcdf(npy_dirs.joinpath('dry_grouped.nc'))

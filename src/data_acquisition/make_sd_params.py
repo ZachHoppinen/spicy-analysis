@@ -67,13 +67,14 @@ for spicy_nc in spicy_netcdfs:
     elev = dataset['lidar-dem'].values.ravel()
     lidar = dataset['lidar-sd'].values.ravel()
     spicy_sd = dataset['snow_depth'].sel(time = closest_ts).values.ravel()
+    wet = dataset['wet_snow'].sel(time = closest_ts).values.ravel()  # haven't tested wet saving so this may break in future
 
-    idx = (~np.isnan(trees)) & (~np.isnan(elev)) & (~np.isnan(lidar)) & (~np.isnan(spicy_sd))
-
+    idx = (~np.isnan(trees)) & (~np.isnan(elev)) & (~np.isnan(lidar)) & (~np.isnan(spicy_sd)) & (~np.isnan(wet)) # haven't tested wet saving so this may break in future
     # save auxillary files
     np.save(ds_dir.joinpath(f'lidar.npy'), lidar[idx])
     np.save(ds_dir.joinpath(f'trees.npy'), trees[idx])
     np.save(ds_dir.joinpath(f'elev.npy'), elev[idx])
+    np.save(ds_dir.joinpath(f'wet.npy'), wet[idx])  # haven't tested wet saving so this may break in future
 
 
     # Brute-force processing loop
