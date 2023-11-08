@@ -94,6 +94,10 @@ def get_stats(x, y, nrmse = False):
     if type(y) == list: y = np.array(y)
     idx = (~np.isnan(x)) & (~np.isnan(y))
     x, y = x[idx], y[idx]
+    if len(x) < 4 or len(y) < 4:
+        if nrmse:
+            return np.nan, np.nan, np.nan, np.nan, np.nan
+        return np.nan, np.nan, np.nan, np.nan
     r, p = pearsonr(x, y)
     bias = get_bias(x, y)
     mae = mean_absolute_error(x, y)
@@ -102,8 +106,9 @@ def get_stats(x, y, nrmse = False):
     if nrmse:
         nrmse_value = rmse / np.mean(x)
         return r, b, mae, rmse, nrmse_value
-
+    
     return r, bias, mae, rmse
+
 
 from scipy.stats import norm
 def fischerz(truth, x1, x2):
@@ -188,55 +193,59 @@ def reorder_timeseries(dataset, ims = False):
         
     return dataset.sortby('time')
 
-in_dir = Path('~/scratch/spicy/SnowEx-Data/').expanduser().resolve()
-data_dir = Path('~/scratch/spicy/SnowEx-Data/').expanduser().resolve()
-out_dir = Path('/bsuhome/zacharykeskinen/spicy-analysis/results/synthetic_compare')
-dss = {fp.stem: xr.open_dataset(fp) for fp in in_dir.glob('*.nc')}
-
-# Create parameter space
-A = np.round(np.arange(1, 3.1, 0.5), 2)
-B = np.round(np.arange(0, 2.01, 0.25), 2)
-C = np.round(np.arange(0.25, 1.001, 0.25), 2)
-
-
-dss = {fp.stem: xr.open_dataset(fp) for fp in in_dir.glob('*.nc')}
-for stem, full_ds in dss.items():
+def make_random_results(out_dir, A, B, C, fp):
+    print(fp)
+    stem = fp.stem
+    # ds, stem = ds_pair
+    full_ds = xr.open_dataset(fp)
     full_ds = full_ds.load()
 
     site_name = stem.replace('_', ' ').replace('Frasier', 'Fraser').split('-')[0]
     im_date = pd.to_datetime(stem.split('_')[-1])
 
     i = 1
-    outfp = out_dir.joinpath('sites', f'{site_name}_{i}.csv')
+    outfp = out_dir.joinpath(f'{site_name}_{i}.csv')
     while outfp.exists():
         i += 1
-        outfp = out_dir.joinpath('rounds', f'{site_name}_{i}.csv')
+        outfp = out_dir.joinpath(f'{site_name}_{i}.csv')
 
-    res = pd.DataFrame()
+    res = pd.DataFrame(index = pd.MultiIndex.from_tuples(list(zip([], [])), names=["condition", "round"]))
 
     ds = full_ds.sel(time = im_date, method = 'nearest').copy()
 
     if site_name not in res.index:
         r, b, mae, rmse = get_stats(ds['snow_depth'], ds['lidar-sd'], nrmse = False)
-        res.loc[site_name, 'real_r'] = r
-        res.loc[site_name, 'real_rmse'] = rmse
-        res.loc[site_name, 'mean_snowdepth'] = ds['lidar-sd'].mean().data.ravel()[0]
-        res.loc[site_name, 'fcf_mean'] = ds['fcf'].mean().data.ravel()[0]
-        res.loc[site_name, 'dry_percentage'] = ds['wet_snow'].mean().data.ravel()[0]
-    
-    for cond in ['all_random', 's1_ims_random', 's1_random']:
-        for round in range(10):
+        res.loc[(site_name, 0), 'real_r'] = r
+        res.loc[(site_name, 0), 'real_rmse'] = rmse
+        res.loc[(site_name, 0), 'mean_snowdepth'] = ds['lidar-sd'].mean().data.ravel()[0]
+        res.loc[(site_name, 0), 'fcf_mean'] = ds['fcf'].mean().data.ravel()[0]
+        res.loc[(site_name, 0), 'dry_percentage'] = ds['wet_snow'].mean().data.ravel()[0]
+
+        rand_rmse_ds, rand_mae_ds, rand_r_ds = optimize(full_ds, A, B, C, im_date)
+
+        a_best = rand_r_ds.max(['B', 'C']).idxmax('A')
+        b_best = rand_r_ds.max(['C', 'A']).idxmax('B')
+        c_best = rand_mae_ds.sel(A = a_best, B = b_best).idxmin('C')
+        
+        full_ds = s1_to_sd(full_ds, A = a_best, B = b_best, C = c_best)
+
+        r, b, mae, rmse = get_stats(full_ds.sel(time = im_date, method = 'nearest')['snow_depth'], ds['lidar-sd'], nrmse = False)
+        res.loc[(site_name, 0), 'optimized_r'] = r
+        res.loc[(site_name, 0), 'optimized_rmse'] = rmse
+
+    for cond in ['fcf_s1_random', 's1_random']:
+        for round_i in range(100):
     
             random_ds = full_ds.copy(deep = True)
             random_ds= random_ds.rio.write_crs('EPSG:4326')
             
-            if cond == 's1_ims_random' or cond == 'all_random':
-                random_ds = reorder_timeseries(random_ds, ims = True)[['s1', 'ims', 'fcf']]
-            elif cond == 's1_random':
+            if cond == 'fcf_s1_random' or cond == 's1_random':
                 random_ds = reorder_timeseries(random_ds, ims = False)[['s1', 'ims', 'fcf']]
-
-            if cond == 'all_random':
-                random_ds['fcf'] = normalize_da(create_random_field(convert_to_utm(random_ds['fcf'])).rio.reproject_match(random_ds['fcf']))
+            # elif cond == 's1_random':
+            #     random_ds = reorder_timeseries(random_ds, ims = False)[['s1', 'ims', 'fcf']]
+            if cond == 'fcf_s1_random':
+                # random_ds['fcf'] = normalize_da(create_random_field(convert_to_utm(random_ds['fcf'])).rio.reproject_match(random_ds['fcf']))
+                random_ds['fcf'] = normalize_da(create_random_field(convert_to_utm(random_ds['fcf']).where(convert_to_utm(random_ds['fcf']) < 10000)).rio.reproject_match(random_ds['fcf']))
 
             random_ds['lidar-sd'] = ds['lidar-sd']
 
@@ -248,16 +257,37 @@ for stem, full_ds in dss.items():
             
             r_ds_full = s1_to_sd(random_ds, A = a_best, B = b_best, C = c_best)
             
-            r_ds = r_ds_full.where(r_ds_full['ims'] == 4)['snow_depth'].dropna(dim = 'time', how = 'all').sel(time = im_date, method = 'nearest')
+            r_sd = r_ds_full.where(r_ds_full['ims'] == 4)['snow_depth'].dropna(dim = 'time', how = 'all').sel(time = im_date, method = 'nearest')
 
-            rand_r, rand_b, rand_mae, rand_rmse = get_stats(r_ds['snow_depth'], r_ds['lidar-sd'], nrmse = False)
-            fischer_z = fischerz(ds['lidar-sd'].data.ravel(), ds['snow_depth'].data.ravel(), r_ds['snow_depth'].data.ravel())
+            rand_r, rand_b, rand_mae, rand_rmse = get_stats(r_sd, ds['lidar-sd'], nrmse = False)
+            fischer_z = fischerz(ds['lidar-sd'].data.ravel(), ds['snow_depth'].data.ravel(), r_sd.data.ravel())
 
-            col_name = site_name + '-' + cond
-            suffix = '-' + str(round)
-            res.loc[col_name, 'random_r' + suffix] = rand_r
-            res.loc[col_name, 'random_rmse' + suffix] = rand_rmse
-            res.loc[col_name, 'fischerz' + suffix] = fischer_z
-            
+            res.loc[(cond, round_i), 'random_r'] = rand_r
+            res.loc[(cond, round_i), 'random_rmse'] = rand_rmse
+            res.loc[(cond, round_i), 'fischerz'] = fischer_z 
 
             res.to_csv(outfp)
+
+from multiprocessing import Pool
+from functools import partial
+
+print('starting')
+in_dir = Path('~/scratch/spicy/SnowEx-Data/').expanduser().resolve()
+data_dir = Path('~/scratch/spicy/SnowEx-Data/').expanduser().resolve()
+out_dir = Path('/bsuhome/zacharykeskinen/spicy-analysis/results/synthetic_compare')
+
+# Create parameter space
+A = np.round(np.arange(1, 3.1, 0.5), 2)
+B = np.round(np.arange(0, 2.01, 0.25), 2)
+C = np.round(np.arange(0.25, 1.001, 0.25), 2)
+
+
+A = np.round(np.arange(1, 3.1, 0.5), 2)
+B = np.round(np.arange(0, 2.01, 0.25), 2)
+C = np.round(np.arange(0.1, 1.001, 0.1), 2)
+
+# out_dir.joinpath('sites').mkdir(exist_ok = True)
+
+pool = Pool()
+
+pool.map(partial(make_random_results, out_dir.joinpath('sites'), A, B, C), list(in_dir.glob('*.nc')))
