@@ -199,6 +199,7 @@ def make_random_results(out_dir, A, B, C, fp):
     # ds, stem = ds_pair
     full_ds = xr.open_dataset(fp)
     full_ds = full_ds.load()
+    full_ds.where(full_ds['lidar-sd'] > 2)
 
     site_name = stem.replace('_', ' ').replace('Frasier', 'Fraser').split('-')[0]
     im_date = pd.to_datetime(stem.split('_')[-1])
@@ -220,6 +221,8 @@ def make_random_results(out_dir, A, B, C, fp):
         res.loc[(site_name, 0), 'mean_snowdepth'] = ds['lidar-sd'].mean().data.ravel()[0]
         res.loc[(site_name, 0), 'fcf_mean'] = ds['fcf'].mean().data.ravel()[0]
         res.loc[(site_name, 0), 'dry_percentage'] = ds['wet_snow'].mean().data.ravel()[0]
+        res.loc[(site_name, 0), 'valid-sd'] = (~ds['lidar-sd'].isnull()).sum().data.ravel()[0]
+
 
         rand_rmse_ds, rand_mae_ds, rand_r_ds = optimize(full_ds, A, B, C, im_date)
 
@@ -290,4 +293,4 @@ C = np.round(np.arange(0.1, 1.001, 0.1), 2)
 
 pool = Pool()
 
-pool.map(partial(make_random_results, out_dir.joinpath('sites'), A, B, C), list(in_dir.glob('*.nc')))
+pool.map(partial(make_random_results, out_dir.joinpath('deep'), A, B, C), list(in_dir.glob('*.nc')))
