@@ -3,6 +3,8 @@ from pathlib import Path
 from spicy_snow.retrieval import retrieve_snow_depth
 from spicy_snow.IO.user_dates import get_input_dates
 
+import shapely
+
 # change to your minimum longitude, min lat, max long, max lat
 area = shapely.geometry.box(8, 45.5, 12, 48)
 
