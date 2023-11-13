@@ -17,4 +17,5 @@ spicy_ds = retrieve_snow_depth(area = area, dates = dates,
                                job_name = f'switerzerland',
                                existing_job_name = 'switerzerland',
                                debug=False,
-                               outfp=out_nc)
+                               outfp=out_nc,
+                               params = [2, 0.5, 0.44])
