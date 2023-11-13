@@ -193,13 +193,20 @@ def reorder_timeseries(dataset, ims = False):
         
     return dataset.sortby('time')
 
+def invert_timerseries(ds):
+    random_ds = ds.copy(deep = True)
+    for band in ['VV','VH']:
+        for ts in ds.time:
+            random_ds['s1'].loc[dict(time = ts, band = band)] = np.fliplr(np.flipud(ds['s1'].sel(time = ts, band = band)))
+    return random_ds
+
 def make_random_results(out_dir, A, B, C, fp):
     print(fp)
     stem = fp.stem
     # ds, stem = ds_pair
     full_ds = xr.open_dataset(fp)
     full_ds = full_ds.load()
-    full_ds.where(full_ds['lidar-sd'] > 2)
+    # full_ds.where(full_ds['lidar-sd'] > 2)
 
     site_name = stem.replace('_', ' ').replace('Frasier', 'Fraser').split('-')[0]
     im_date = pd.to_datetime(stem.split('_')[-1])
@@ -236,12 +243,15 @@ def make_random_results(out_dir, A, B, C, fp):
         res.loc[(site_name, 0), 'optimized_r'] = r
         res.loc[(site_name, 0), 'optimized_rmse'] = rmse
 
-    for cond in ['fcf_s1_random', 's1_random']:
-        for round_i in range(100):
+    for cond in ['invert', 'fcf_s1_random', 's1_random']:
+        for round_i in range(50):
     
             random_ds = full_ds.copy(deep = True)
             random_ds= random_ds.rio.write_crs('EPSG:4326')
             
+            if cond == 'invert':
+                random_ds = invert_timerseries(random_ds)[['s1', 'ims', 'fcf']]
+
             if cond == 'fcf_s1_random' or cond == 's1_random':
                 random_ds = reorder_timeseries(random_ds, ims = False)[['s1', 'ims', 'fcf']]
             # elif cond == 's1_random':
@@ -287,10 +297,10 @@ C = np.round(np.arange(0.25, 1.001, 0.25), 2)
 
 A = np.round(np.arange(1, 3.1, 0.5), 2)
 B = np.round(np.arange(0, 2.01, 0.25), 2)
-C = np.round(np.arange(0.1, 1.001, 0.1), 2)
+C = np.round(np.arange(0.25, 1.001, 0.25), 2)
 
 # out_dir.joinpath('sites').mkdir(exist_ok = True)
 
 pool = Pool()
 
-pool.map(partial(make_random_results, out_dir.joinpath('deep'), A, B, C), list(in_dir.glob('*.nc')))
+pool.map(partial(make_random_results, out_dir.joinpath('inverted'), A, B, C), list(in_dir.glob('*.nc')))
