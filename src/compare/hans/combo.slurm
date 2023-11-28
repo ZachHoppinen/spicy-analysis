@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#SBATCH -J combo # job name
+#SBATCH -J combo_hans # job name
 #SBATCH -o /bsuhome/zacharykeskinen/spicy-analysis/logs/%x-%j.log # output and error file name (%j expands to jobID)
 #SBATCH -n 1 # total number of tasks requested
 #SBATCH -N 1 # number of nodes you want to run on
