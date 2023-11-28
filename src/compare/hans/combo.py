@@ -16,7 +16,7 @@ b_ds = xr.open_dataset('~/scratch/spicy/SnowEx-Data/Banner_2021-03-15.nc')
 dss = []
 for fp in tqdm(fps):
     dt = pd.to_datetime(fp.stem.split('_')[1])
-    if dt > pd.to_datetime('2019-08-01') and dt < pd.to_datetime('2021-04-01'):
+    if dt > pd.to_datetime('2020-08-01') and dt < pd.to_datetime('2021-04-01'):
         ds = xr.open_dataset(fp)['snd']
         ds = ds.expand_dims(time = [dt])
         ds = ds.sel(lat = slice(b_ds.y.max(), b_ds.y.min()), lon = slice(b_ds.x.min(), b_ds.x.max()))
