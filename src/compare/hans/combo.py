@@ -39,7 +39,10 @@ dss = {fp.stem: xr.open_dataset(fp) for fp in in_dir.glob('*.nc')}
 # experiemential data
 data_dir = Path('/bsuhome/zacharykeskinen/scratch/experimental_sentinel1_snow_depth_data')
 out_dir = Path('~/scratch/spicy/experimental_SnowEx-Hans-s1').expanduser()
-fps = list(data_dir.glob('snd_*.nc'))
+fps = list(data_dir.glob('*.nc'))
+
+# gives us the lats and longitudes
+old = xr.open_dataset('~/scratch/SD_20180126.nc')
 
 for stem, old_ds in dss.items():
     new_dss = []
@@ -49,9 +52,9 @@ for stem, old_ds in dss.items():
         if dt > pd.to_datetime('2019-08-01') and dt < pd.to_datetime('2021-04-01'):
             ds = xr.open_dataset(fp)['snd']
             ds = ds.isel(ease2_x = slice(0, 34703))
-            ds = xr.DataArray(ds.data, dims = ['lon','lat'], coords = {'lon': ('lon', old.lon.data), 'lat': ('lat', old.lat.data)})
+            ds = xr.DataArray(ds.data, dims = ['lon','lat'], coords = {'lon': ('lon', old.lon.data), 'lat': ('lat', old.lat.data[::-1])})
             ds = ds.expand_dims(time = [dt])
-            ds = ds.sel(lat = slice(old_ds.y.min(), old_ds.y.max()), lon = slice(old_ds.x.min(), old_ds.x.max()))
+            ds = ds.sel(lat = slice(old_ds.y.max(), old_ds.y.min()), lon = slice(old_ds.x.min(), old_ds.x.max()))
             new_dss.append(ds)
 
     full = xr.concat(new_dss, dim = 'time')
