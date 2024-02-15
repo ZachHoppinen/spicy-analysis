@@ -167,3 +167,5 @@ logs/
 *.nfs
 
 *.gif
+
+data/
