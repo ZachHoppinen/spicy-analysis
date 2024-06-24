@@ -169,3 +169,5 @@ logs/
 *.gif
 
 data/
+
+*.DS_store
