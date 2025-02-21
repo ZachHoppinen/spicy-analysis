@@ -1,0 +1,626 @@
+%% Copernicus Publications Manuscript Preparation Template for LaTeX Submissions
+%% ---------------------------------
+%% This template should be used for copernicus.cls
+%% The class file and some style files are bundled in the Copernicus Latex Package, which can be downloaded from the different journal webpages.
+%% For further assistance please contact Copernicus Publications at: production@copernicus.org
+%% https://publications.copernicus.org/for_authors/manuscript_preparation.html
+
+
+%% Please use the following documentclass and journal abbreviations for preprints and final revised papers.
+
+%% 2-column papers and preprints
+\documentclass[journal abbreviation, manuscript]{copernicus}
+
+%% Journal abbreviations (please use the same for preprints and final revised papers)
+
+
+% Advances in Geosciences (adgeo)
+% Advances in Radio Science (ars)
+% Advances in Science and Research (asr)
+% Advances in Statistical Climatology, Meteorology and Oceanography (ascmo)
+% Aerosol Research (ar)
+% Annales Geophysicae (angeo)
+% Archives Animal Breeding (aab)
+% Atmospheric Chemistry and Physics (acp)
+% Atmospheric Measurement Techniques (amt)
+% Biogeosciences (bg)
+% Climate of the Past (cp)
+% DEUQUA Special Publications (deuquasp)
+% Earth Surface Dynamics (esurf)
+% Earth System Dynamics (esd)
+% Earth System Science Data (essd)
+% E&G Quaternary Science Journal (egqsj)
+% EGUsphere (egusphere) | This is only for EGUsphere preprints submitted without relation to an EGU journal.
+% European Journal of Mineralogy (ejm)
+% Fossil Record (fr)
+% Geochronology (gchron)
+% Geographica Helvetica (gh)
+% Geoscience Communication (gc)
+% Geoscientific Instrumentation, Methods and Data Systems (gi)
+% Geoscientific Model Development (gmd)
+% History of Geo- and Space Sciences (hgss)
+% Hydrology and Earth System Sciences (hess)
+% Journal of Bone and Joint Infection (jbji)
+% Journal of Micropalaeontology (jm)
+% Journal of Sensors and Sensor Systems (jsss)
+% Magnetic Resonance (mr)
+% Mechanical Sciences (ms)
+% Natural Hazards and Earth System Sciences (nhess)
+% Nonlinear Processes in Geophysics (npg)
+% Ocean Science (os)
+% Polarforschung - Journal of the German Society for Polar Research (polf)
+% Primate Biology (pb)
+% Proceedings of the International Association of Hydrological Sciences (piahs)
+% Safety of Nuclear Waste Disposal (sand)
+% Scientific Drilling (sd)
+% SOIL (soil)
+% Solid Earth (se)
+% State of the Planet (sp)
+% The Cryosphere (tc)
+% Weather and Climate Dynamics (wcd)
+% Web Ecology (we)
+% Wind Energy Science (wes)
+
+
+%% \usepackage commands included in the copernicus.cls:
+%\usepackage[german, english]{babel}
+%\usepackage{tabularx}
+%\usepackage{cancel}
+%\usepackage{multirow}
+%\usepackage{supertabular}
+%\usepackage{algorithmic}
+%\usepackage{algorithm}
+%\usepackage{amsthm}
+%\usepackage{float}
+%\usepackage{subfig}
+%\usepackage{rotating}
+
+
+\begin{document}
+
+\title{Evaluating Snow Depth Retrievals from Sentinel-1 Volume Scattering over NASA SnowEx Sites}
+
+
+% \Author[affil]{given_name}{surname}
+% \Author[][EMAIL]{}{} %% correspondence author
+
+\Author[1,2][Zachary.Hoppinen@u.boisestate.edu]{Zachary}{Hoppinen}
+\Author[3]{Ross T.}{Palomaki}
+\Author[4]{George}{Brencher}
+\Author[5,6]{Devon}{Dunmire}
+\Author[4]{Eric}{Gagliano}
+\Author[7]{Adrian}{Marziliano}
+\Author[8,9]{Jack}{Tarricone}
+\Author[1]{Hans-Peter}{Marshall}
+
+\affil[1]{Boise State University, Department of Geosciences, 1295 University Drive, Boise, ID, USA}
+\affil[2]{Cold Regions Research and Engineering Laboratory, Engineer Research and Development Center, United States Army, Hanover, NH 03755, USA}
+\affil[3]{Institute of Arctic and Alpine Research, University of Colorado, 4001 Discovery Dr, Boulder, CO 80303}
+\affil[4]{Civil  and  Environmental  Engineering Department,  University  of  Washington,  Seattle,  WA  98195  USA}
+\affil[5]{Department of Earth and Environmental Sciences, KU Leuven, Heverlee, Belgium}
+\affil[6]{Department of Atmospheric and Oceanic Sciences, CU Boulder, 4001 Discovery Dr, Boulder, CO 80303}
+\affil[7]{Department of Civil, Construction, and Environmental Engineering, University of New Mexico, Albuquerque, NM 87131, USA}
+\affil[8]{Hydrological Sciences Laboratory, NASA Goddard Space Flight Center, Greenbelt, MD 20770, USA}
+\affil[9]{NASA Postdoctoral Program, NASA Goddard Space Flight Center, Greenbelt, MD 20770, USA}
+
+%% The [] brackets identify the author with the corresponding affiliation. 1, 2, 3, etc. should be inserted.
+
+%% If an author is deceased, please mark the respective author name(s) with a dagger, e.g. "\Author[2,$\dag$]{Anton}{Smith}", and add a further "\affil[$\dag$]{deceased, 1 July 2019}".
+
+%% If authors contributed equally, please mark the respective author names with an asterisk, e.g. "\Author[2,*]{Anton}{Smith}" and "\Author[3,*]{Bradley}{Miller}" and add a further affiliation: "\affil[*]{These authors contributed equally to this work.}".
+
+
+\runningtitle{TEXT}
+
+\runningauthor{TEXT}
+
+
+
+
+
+\received{}
+\pubdiscuss{} %% only important for two-stage journals
+\revised{}
+\accepted{}
+\published{}
+
+%% These dates will be inserted by Copernicus Publications during the typesetting process.
+
+
+\firstpage{1}
+
+\maketitle
+
+
+
+\begin{abstract}
+
+Snow depth retrievals from spaceborne C-band synthetic aperture radar (SAR) backscatter have the potential to fill an important gap in the remote monitoring of seasonal snow. Sentinel-1 SAR data have been used previously in an empirical algorithm to generate snow depth products with near-global coverage, sub-weekly temporal resolution, and spatial resolutions on the order of hundreds of meters to 1 km. However, there has been no published independent validation of this algorithm. In this work we develop the first open-source software package that implements this Sentinel-1 snow depth retrieval algorithm as described in the original papers, and evaluate the snow depth retrievals against nine high-resolution lidar snow depth acquisitions collected during the winters of 2019--2020 and 2020--21 at six study sites across the western United States as part of the NASA SnowEx Mission. Across all sites, we find poor agreement between the Sentinel-1 snow depth retrievals and the lidar snow depth measurements, with a mean RMSE of 0.92~m and a mean Pearson correlation coefficient $R$ of 0.46. Algorithm performance improves slightly in deeper snowpacks and at higher elevations. We further investigate the underlying Sentinel-1 data for a snow signal through an exploratory analysis of the cross-polarization backscatter ratio relative to lidar snow depths. We find a significant correlation between this cross ratio and snow depth over $\sim$1.5~m but no relationship to a slight negative correlation for snow depths less than $\sim$1.5~m. We attribute poor algorithm performance to a) the variable amount of apparent snow depth signal in the S1 cross ratio and b) an algorithm structure that does not adequately convert S1 backscatter signal to snow depth. Our findings provide an open-source frame work for future investigations, along with insight into the applicability of C-band SAR for snow depth retrievals and directions for future C-band snow depth retrieval algorithm development. C-band SAR has the potential to address gaps in radar monitoring of deep snowpacks; however, more research into retrieval algorithms is necessary to better understand the physical mechanisms and uncertainties of C-band volume scattering-based retrievals.
+\end{abstract}
+
+
+%\copyrightstatement{TEXT} %% This section is optional and can be used for copyright transfers.
+
+
+\introduction  %% \introduction[modified heading if necessary]
+
+Runoff from seasonal snow provides water for billions of people~\citep{Barnett.2005, Mankin.2015}, supplies up to 70~\% of the annual discharge in the western United States (WUS;~\citet{Li.201743j}), generates clean hydroelectric power, and supports agricultural and recreation industries at a total value estimated in the trillions of dollars~\citep{Sturm.2017}. Understanding the spatial distribution of snow water equivalent (SWE), the defining hydrologic variable of the seasonal snowpack, is essential for effective management of this critical resource~\citep{Bales.2006}. SWE is the product of snow depth and snow density relative to water, with snow depth spatial variability providing the majority of the variation in SWE values~\citep{Sturm.20109ji}. Therefore, accurate measurements of snow depth are crucial for global SWE estimation, since measurement of snow depth is typically much easier and lower cost than direct measurements of SWE.
+
+Current operational snow depth measurement techniques lack either the spatial or temporal resolution necessary to accurately monitor basin-scale snow depth patterns for a variety of scientific and resource management applications (NASEM, 2018)\nocite{Sciences.2018}. Networks of in-situ weather stations (e.g., SNOTEL in the United States) make point measurements of snow depth with high temporal resolution, but accurate spatial interpolation required to generate distributed products presents a significant challenge~\citep{Dressler.2006, Bales.2006, Schneider.2016}, largely due to snow having a typical correlation length of 50--200~m~\citep{Trujillo.2009}.  Measurements from spaceborne passive microwave instruments~\citep{Kelly.2003, Takala.2011} can be used to produce distributed snow depth products with 12-hour temporal resolutions. However, passive microwave measurements saturate in dry snowpacks approximately 0.8~m deep~\citep{Tedesco.2010, Smith.2018}, which represents a small fraction of total snow depth in some regions, and retrievals are unreliable over complex topography~\citep{Tong.2010} due to spatial resolutions at the km to 10s of km scale. No other global operational SWE remote sensing tool currently exists, despite SWE being one of the largest uncertainties in the hydrologic cycle~\citep{Sciences.2018}. Given the challenges and limitations associated with widely operationalized methods, other techniques are under development to produce spatially-distributed snow depth and SWE measurements.
+
+High-resolution commercial stereo imagery~\citep{Shaw.2020, Hu.2023}, airborne lidar~\citep{Currier.2019, Deems.2013} and structure-from-motion~\citep{Bühler.2016, Nolan.2015, Miller.2022, Meyer.2022} provide distributed snow depth maps at meter to submeter-scale spatial resolutions with errors on the order of tens of centimeters~\citep{McGrath.2019, Currier.2019, Deems.2013}. The Airborne Snow Observatory (ASO;~\citealp{Painter.2016}) and the Airborne Coastal Observatory~\citep{Geospatial2021Snow} produce snow depth maps using airborne lidar in mountain basins across western North America. However, logistical constraints (e.g., cloud cover, tree canopies, platform range, large expense) typically limit acquisition frequency and spatial coverage. Spaceborne lidar has shown promise for measuring snow depth, yet currently has high uncertainties (0.5--2~m) in complex terrain and only provides non-repeating sparsely distributed and infrequent linear transects of point-based returns, requiring high-resolution airborne lidar snow-free surveys to estimate snow depth~\citep{Enderlin.2022,Deschamps-Berger.2023, Besso.2024}.
+
+Synthetic aperture radar (SAR) is a promising technique to complement new and mature methods for snow depth monitoring. SAR is a type of active microwave remote sensing that can operate in all weather conditions, does not rely on solar illumination, and is capable of producing datasets at meter-scale spatial resolution from spaceborne platforms. Unlike optical and lidar techniques, SAR signals penetrate the snow surface and interact with the snowpack, allowing for measurements of snowpack properties. The extent of this penetration and which snowpack features are interacted with varies depending on the SAR signal's frequency ~\citep{Rosen.2000, Tsai.2019, Marshall.2021}. Thus, SAR methods for retrievals of snow depth and SWE have the potential to meet the \citet{Sciences.2018} Decadal Survey requirement of snow depth and SWE measurements at 100~m spatial resolution. However, SAR-based methods for retrieving snow depth and SWE are relatively immature and require additional investigation to understand limitations before they can be operationalized. While radar approaches are more directly related to SWE rather than depth, there are orders of magnitude more depth observations available than SWE, and therefore more independent measurements for validation. Two recent studies~\citep{Lievens.2019, Lievens.2022} have demonstrated the potential of deriving spatially distributed snow depth maps from Sentinel-1 (S1) SAR imagery. In the original studies, the technique was validated using snow depth measurements from point-based stations and spatially-distributed modeled data. A recent independent validation effort from \citet{Broxton.2024} compared S1 snow depths to ASO lidar-based and University of Arizona \citep{Broxton.2016} modeled depths at 500~m and 1~km spatial resolution. For all S1 pixels, they a found moderate coefficient of determination values (R$^2$~=~0.62) and large negative biases ($\sim$$-$50~\%) when compared to the ASO data. However, error metrics improved when flagging for wet snow pixels (R$^2$~=~0.89). Here, we provide another independent validation of the S1 snow depth retrieval technique using spatially-distributed, lidar-based snow depth measurements across multiple sites in the WUS~\citep{Abedisi.2022}. 
+
+\subsection{SAR volume scattering snow depth retrieval theory}
+
+SAR sensors emit electromagnetic energy in the microwave range (1--40~GHz) and measure the amplitude and phase of the backscattered (returning) wave. Depending on the radar wavelength, microwaves can be transmissible through snow, but when the wavelength is within an order of magnitude of the diameter of snow grains ($\sim$0.1--5~mm), volumetric scattering occurs. Additionally, surface scattering will occur within the snowpack at layer interfaces.~\citep{Naderpour.2022, Tsang.2022}. Hence, for SAR frequencies approximately between 5--40~GHz, the presence of snow increases volumetric scattering relative to non-snow conditions (Figure~\ref{fig:conceptual}). Some SAR-based methods exploit this increased volumetric backscatter to retrieve measurements of snow depth and SWE~\citep{Tsang.2022}. These approaches are ineffective in wet snow conditions, where liquid water within the snowpack absorbs substantial microwave energy, leading to marked reductions in backscatter and limiting the depth of microwave penetration.
+
+The relationship between C-band volume scattering and snow depth is an ongoing area of investigation. Initial studies suggested that dry snow has virtually no effect on volumetric scattering at C-band and any mid-winter changes in backscatter were caused by variations in snow-ground interface scattering and variability in the soil dielectric constant ~\citep{Wegmüller.1990, Bernier.1999, Sun.2015}. However, these studies were limited by shallow ($<$1~m depth) snowpacks~\citep{Bernier.1998, Fuller.2009}, solely co-polarized (parallel transmitting and receiving antennas) backscatter~\citep{Mätzler.1987, Fuller.2009, Shi.2000}, or an inconsistent ground footprint~\citep{Strozzi.1997}. These results align with microwave scattering theory as the wavelength at C-band is too large to be scattered by individual snow grains, which are typically $<$5~mm. Previous studies using tower-mounted radars~\citep{Strozzi.1997, Mätzler.1987} and aerial radar~\citep{Bernier.1998} detected either no relationship or even a slight negative correlation between C-band backscatter and snow depth.
+
+Other studies have suggested that dry snowpacks are not fully transparent at C-band. A study using artificial snow in a laboratory setting showed a cross-polarized (orthogonal transmitting and receiving antennas) backscatter increase of 5~dB with a 1~m snow depth increase~\citep{Kendra.1995}. Two recent tower-based studies showed 2--5~dB increases in co-polarized backscatter for C-band radiation~\citep{Naderpour.2022} and significant volume scattering from C-band cross-polarized backscatter at snowpack layering interfaces~\citep{Brangers.2023}, likely due to surface roughness effects. More recently, the development of dense media radiative transfer (DMRT) models has suggested that anisotropic clusters of snow grains may produce more cross-polarized backscatter from within the snowpack volume at C-band than previous isotropic scattering models suggested~\citep{West.2000, Ding.2010, Chang.2014, Zhu.2023}. The increase in cross-polarized backscatter from these clusters may be sufficiently large to allow for measurements of snow depth changes as new snow increases the cross-polarized energy that is backscattered toward the sensor.
+
+\begin{figure}[htbp]
+\includegraphics[width=0.7\textwidth]{figures/fig01.png}
+\caption{Conceptual figure showing the increases in cross-polarized backscatter with increasing snow depth.}
+\label{fig:conceptual}
+\end{figure}
+
+
+\subsection{Research Objectives}
+
+These theoretical results form the basis for satellite-based snow depth retrievals. \citet{Lievens.2019} developed an empirical algorithm based on the ratio of VH (cross-polarized) to VV (co-polarized) backscatter, referred to as the cross-ratio, from S1 imagery to map snow depth at 1~km resolution. This approach attempts to reduce the impacts of changes in the soil and geometric signals, which would affect both polarizations, and isolate the snow signal, which is expected to primarily affect the cross-polarized backscatter. Initial results over the Northern Hemisphere showed mean absolute errors (MAE) of 0.31~m when compared to in-situ station measurements. The technique was further refined in a subsequent study by \citet{Lievens.2022} over Switzerland and Austria, where the authors compared the spaceborne retrievals to modeled snow depth changes. The best results were achieved in regions with snow depths greater than 1.5~m, forest cover (FC) less than 80~\%, and elevations higher than 1000~m, which would minimize wet snow. 
+
+While the results presented in \citet{Lievens.2019, Lievens.2022} are encouraging, the original works only validated their algorithm against point-based in situ measurements and modeled snow depths. Moreover, a publicly-available version of the algorithm has not been released by the authors, hindering any independent validation and algorithm enhancements. In this study we present an open-source Python package called 'spicy\_snow'~\citep{Hoppinen.2023} that implements the S1 snow depth retrieval algorithm as described in \citet{Lievens.2022}. We then evaluate algorithm performance using new spatially distributed lidar snow depth datasets collected during NASA SnowEx 2020--2021 campaigns.
+
+\section{Methods}
+
+\subsection{Datasets}
+
+\subsubsection{Sentinel-1 (S1) imagery}\label{sec:s1_processing}
+
+The S1 mission is a constellation of polar-orbiting satellites that acquire C-band (5.405~GHz or 5.55~cm) SAR data with a 12-day orbital cycle. We used S1 images acquired in interferometric wide (IW) swath mode, which are dual-polarized -- vertical–vertical (VV) and vertical–horizontal (VH). The overlapping swaths captured by S1 from different orbits result in 2–-6 day revisit intervals for mid-latitudes and up to daily revisits at polar latitudes.  S1 images were processed using the Alaska Satellite Facility’s (ASF) HyP3 pipeline~\citep{Hogenson.2020} to produce radiometrically terrain corrected $\gamma_0$ backscatter images using GAMMA software~\citep{Frerebeau.2023, Lebrun.2020} and the GLO-30 Copernicus DEM (European Space Agency, 2021)\nocite{Agency.2021}. Although this DEM is different from the SRTM DEM used by \citet{Lievens.2019, Lievens.2022} in their S1 image processing, we selected the GLO-30 dataset in order to avoid inaccuracies inherent in the SRTM data over mountainous regions in North America~\citep{Tarricone.2023}. Image pre-processing included precise orbit file application, border noise removal, thermal noise removal, radiometric calibration, range-doppler terrain correction, and terrain flattening to produce $\gamma_0$ images at 30 m resolution. We implemented 3~$\times$~3 multi-looking processing step to produce images at 90~m resolution, which approximates but does not exactly match the 100~m resolution used by \citet{Lievens.2022}. 
+
+For each study site (Section~\ref{sec:method.snowex}, Table ~\ref{table:datasets}, Figure~\ref{fig:study_sites}), we downloaded all S1 images that contained the bounding box of the lidar validation dataset, beginning on 1 August preceding the winter season. Different relative orbits produce images with changing backscattered power due to variable incidence angles. To account for these artifacts we normalized the images from each S1 orbit geometry, as done in the \citet{Lievens.2022} algorithm. For each specific orbit geometry and polarization, we applied a constant shift to all images so that the mean of a particular image matched the overall mean for the given orbit geometry and polarization. To correct for outliers, we calculated the 10th and 90th percentiles of backscattered power for each polarization and subset of images. We then masked any values that were 3~dB above the 90th percentile or 3~dB below the 10th percentile. We also masked out pixels with local incidence angles greater than 70$^{\circ}$ to avoid regions of radar shadow. Additional processing details are given in Appendix~\ref{appendix:algorithm}.
+
+\subsubsection{SnowEx lidar acquisitions}\label{sec:method.snowex}
+
+\begin{figure}[htbp]
+\includegraphics[width=\textwidth]{figures/overview_map.png}
+\caption{Bounding boxes of airborne lidar collected at the NASA SnowEx sites.}
+\label{fig:study_sites}
+\end{figure}
+
+The NASA SnowEx campaign~\citep{Durand.2019} was a multi-year effort aimed at addressing knowledge gaps in snow remote sensing and to prepare for a snow-focused satellite mission. During the SnowEx 2020 and 2021 campaigns, Quantum Spatial Inc.~(QSI) acquired snow-free and snow-on lidar validation datasets at six research sites across the WUS (Figure~\ref{fig:study_sites}): Fraser Experimental Forest (Fraser) and Cameron Pass (Cameron) in Colorado; Little Cottonwood Canyon (Little Cottonwood) in Utah; Dry Creek Experimental Watershed (Dry Creek), Mores Creek Summit (Mores), and Banner Summit (Banner) in Idaho~\citep{Abedisi.2022, Abedisi.2022g5s}. Banner, Fraser, and Mores were surveyed in both 2020 and 2021, resulting in nine unique snow depth products (Table \ref{table:datasets}). QSI processed these data, providing snow-free digital elevation models (DEMs), vegetation height, and \citep{Abedisi.2022} used these products to produce snow depth maps at 0.5~m spatial resolution. To compare these maps with S1 snow depth retrievals, we aggregated the lidar snow depth measurements at 90~m spatial resolution by taking the average of all 0.5~m lidar snow depth measurements inside each 90~m S1 pixel. 
+
+%%%%% OLD TABLE
+%\begin{sidewaystable*}[t]
+%\caption{Overview of study sites}
+%\label{table:datasets}
+%\begin{tabular}{|p{16mm}|p{16mm}|p{8mm}|p{18mm}|p{30mm}|p{16mm}|p{16mm}|p{12mm}|p{15mm}|p{12mm}|} %p{15mm}| %uncomment to add back Notes column
+%\hline
+%\textbf{Site name} & \textbf{Center \newline coordinates} & \textbf{Area [km\textsuperscript{2}]} & \textbf{Elevation range [m]} & \textbf{Snow classification} \newline \citep{Sturm.1995} & \textbf{Lidar flight date(s)} & \textbf{Lidar accuracy\footnote{Lidar measurements were compared to SNOTEL measurements by averaging the 0.5~m resolution lidar data within a 3~m buffer around the SNOTEL location.} [m]} & \textbf{S1 pixel \newline count} & \textbf{SNOTEL} & \textbf{Mean Snow Depth [m]} \\ \hline
+
+%Cameron & -105.88980, \newline 40.53842 & 22.1 & 2897 -- 3711 & Boreal Forest (92\%) \newline Montane Forest (4\%) \newline Tundra (4\%) & 2021-03-19 & 0.02 & 2378 & Joe Wright CO:551 & 1.41\\ \hline
+
+%Fraser  & -105.89437, \newline 39.88454 & 63.2 & 2667 -- 3800 & Boreal Forest (57\%) \newline Montane Forest (40\%) \newline Tundra (3\%) & 2020-02-11 \newline 2021-03-19  & 0.03 \newline 0.02 & 3847 \newline 6787 & Fool Creek CO:1186 & 1.11 \newline 0.86 \\ \hline % & 2020 LiDAR flight covers smaller area (36.2km\textsuperscript{2})
+
+%Little \newline Cottonwood & -111.66790, \newline 40.55951 & 28.1 & 1983 -- 3457 & Tundra (35\%) \newline Boreal Forest (30\%) \newline Montane Forest (31\%) \newline Prairie (4\%) & 2021-03-18 & 0.19 & 2827 & Snowbird ID:766 & 1.81 \\ \hline
+
+%Banner & -115.18431, \newline 44.26822 & 168.7 & 1566 -- 2820 & Montane Forest (40\%) \newline Boreal Forest (20\%) \newline Prairie (20\%) \newline Tundra (20\%) & 2020-02-18 \newline 2021-03-15 & 0.02 \newline 0.03 & 16,415 \newline 16,692 & Banner Summit ID:312 & 1.51 \newline 1.48\\ \hline % & Banner SNOTEL Info:\newline ID: 312, Elevation: 2145m \newline Loc: (44.33, -115.23)
+
+%Mores & -115.68530, \newline 43.94584 & 34.7 & 1551 -- 2469 & Montane Forest (45\%) \newline Prairie (25\%) \newline Boreal Forest (18\%) \newline Tundra (12\%) & 2020-02-09 \newline 03-15-2021 & 0.01 \newline 0.06 & 3694 \newline 3813 & Mores Creek Summit ID:637 & 1.79 \newline 1.60 \\ \hline
+
+%Dry Creek & -116.10371,\newline 43.74664 & 38.3 & 1233 -- 2279 & %Montane Forest (97\%) \newline Prairie (3\%) & 2020-02-19 & 0.05 & %3792 & Bogus Basin ID:978 & 1.05 \\ \hline
+%\end{tabular}
+
+\begin{table*}[t]
+\caption{Overview of six study sites and lidar data. Lidar snow depths accuracy's were computed by averaging the 0.5~m resolution lidar data within a 3~m buffer around the SNOTEL location. The snow classes: Montane Forest (MF) Boreal Forest (BF), Prairie (P), and Tundra (T), are defined by \cite{Sturm.2021}.}
+\label{table:datasets}
+\begin{tabular}{llllllllll} 
+\hline
+Site     & Center              & Area      & Elevation & Snow & Date(s) & Accuracy & S1 pixels & SNOTEL & Mean \\ 
+name     & coordinates         & (km$^{2}$) & range (m) & class & (m/d/y)  & (m)    & (count) &         & depth (m) \\ \hline
+
+Cameron & $-$105.890$^{\circ}$, & 22.1    & 2897-- & BF (92~\%) & 3/19/2021 & 0.02 & 2378 & Joe Wright & 1.41\\
+         & 40.538$^{\circ}$    &      & 3711    & MF (4~\%)  &           &       &      & (CO:551)        & \\
+         &                     &      &         & T (4~\%)   &           &       &      &           & \\ \hline
+
+Fraser   & $-$105.894$^{\circ}$, & 63.2 & 2667--  & BF (57~\%) & 2/11/2020 & 0.03 & 3847 & Fool Creek & 1.11 \\
+         & 39.885$^{\circ}$     &       & 3800 & MF (40~\%) & 3/19/2021 & 0.02 & 6787 & (CO:1186)  & 0.86 \\
+         &                      &       &      & T (3~\%)   &           &      &      &            & \\ \hline
+
+Little     & $-$111.668$^{\circ}$, & 28.1 & 1983-- & BF (30~\%) & 3/18/2020 & 0.19 & 2827 & Snowbird & 1.81 \\
+Cottonwood & 40.560$^{\circ}$     &      & 3457 & MF (31~\%) &           &      &      & (UT:766) &     \\
+           &                      &      &      & T  (35~\%) &           &      &      &          &    \\
+           &                      &      &      & P  (4~\%)  &           &      &      &          &    \\ \hline
+           
+Banner     & $-$115.184$^{\circ}$, & 168.7 & 1566-- & BF (20~\%) & 2/18/2020 & 0.02 & 16415 & Banner  & 1.51 \\
+           & 44.268$^{\circ}$    &       & 2820 & MF (40~\%) & 3/15/2021 & 0.03  & 16692 & Summit  & 1.48 \\
+           &                      &       &      & T  (20~\%) &           &      &        & (ID:312)&    \\
+           &                      &       &      & P  (20~\%) &           &      &        &         &    \\ \hline
+
+Mores      & $-$115.685$^{\circ}$, & 34.7  & 1551-- & BF (18~\%) & 2/09/2020 & 0.01 & 3694 & Mores   & 1.79 \\
+           & 43.946$^{\circ}$     &       & 2469 & MF (45~\%) & 3/15/2021 & 0.06 & 3813 & Creek   & 1.60 \\
+           &                      &       &      & T  (12~\%) &           &      &      & Summit  &    \\
+           &                      &       &      & P  (25~\%) &           &      &      & (ID:637)&    \\ \hline
+
+Dry Creek  & $-$116.104$^{\circ}$, & 38.3  & 1233-- & MF (97~\%) & 2/19/2020 & 0.05 & 3792 & Bogus    & 1.05 \\
+           & 43.747$^{\circ}$     &       & 2279   & P  (3~\%)  &           &      &      & Basin     &    \\
+           &                      &       &        &            &           &      &      & (ID:978)  &    \\ \hline
+
+\end{tabular}
+
+%\belowtable{} % Table Footnotes
+\end{table*}
+\clearpage
+
+\subsubsection{Ancillary datasets}
+
+The S1 snow depth retrieval algorithm requires FC and snow cover datasets in addition to S1 imagery. Following the procedure outlined in~\citet{Lievens.2022}, we used the Copernicus Global Land Service Proba-V land cover dataset~\citep{Buchhorn.2020} at 100~m resolution to quantify FC and mask open-water areas. Additionally, we use the Interactive Multisensor Snow and Ice Mapping System (IMS)~\citep{NSIDC.2008, Helfrick.2007}, a daily binary snow cover product at 1~km spatial resolution, to delineate binary snow presence. 
+
+\subsection{Snow depth retrieval algorithm}\label{S:algorithm}
+
+We implemented a fully reproducible, open-source Python version~\citep{Hoppinen.2023} of the S1 algorithm introduced by~\citet{Lievens.2022}. A complete description also appears in Appendix~\ref{appendix:algorithm}. The central equation of this pixel-wise approach can be written as:
+
+\begin{equation}\label{equation:snow_depth_change}
+    \Delta SD = C \left[ \hspace{1 pt} (1 - FC) \cdot \Delta ( A \gamma^0_{\mathrm{VH}} - \gamma^0_{\mathrm{VV}} ) + B \cdot FC \cdot \Delta \gamma^0_{\mathrm{VV}} \right] 
+\end{equation}
+
+$A$ is used to control the relative weight of the VH backscatter to VV in the cross-polarized ratio, while $B$ controls the relative impact of co-polarized backscatter changes on the final snow depth retrievals.
+
+where snow depth ($SD$) is obtained within each S1 pixel using the cross-polarized ($\gamma^0_{\mathrm{VH}}$) and co-polarized ($\gamma^0_{\mathrm{VV}}$) S1 backscatter in units of dB, as well as three empirical tuning parameters ($A$, $B$, and $C$) that are used to control the relative weight of the VH backscatter to VV in the cross-polarized ratio ($A$), the influence of vegetation effects ($B$) and rescale a ``snow index'' to snow depth ($C$). Subtraction of cross- and co-polarized backscatter in the logarithmic dB scale equates to a ratio in the linear power scale, and we refer to this $\gamma^0_{\mathrm{VH}} - \gamma^0_{\mathrm{VV}}$ term as the cross ratio (CR). The $\Delta$ operator in Eq.~\ref{equation:snow_depth_change} denotes changes between two S1 images with the same orbital geometry, which may not be the two closest images in time. The S1 algorithm implements Eq.~\ref{equation:snow_depth_change} only for pixels with snow present in the IMS data corresponding with the timestamp of the S1 image. Starting with an assumed zero $SD$ on August 1 of a given year, $\Delta SD$ is integrated over time. 
+
+The empirical $A$, $B$, and $C$ parameters in Eq.~\ref{equation:snow_depth_change} are designed to be tunable to optimize algorithm performance. \citet{Lievens.2022} used parameter values $A$~=~2.0, $B$~=~0.5, $C$~=~0.44 optimized to modeled snow depth data over Switzerland. Here, we derived a new set of parameters optimized for the WUS, using the S1 image closest in time to each of the nine lidar acquisitions (Table~\ref{table:datasets}). The time between S1 and lidar snow depth acquisitions was less than two days, except for Mores 2020 (two days, one hour) and Fraser 2020 (five days, 13 hours). As in \citet{Lievens.2022}, we optimized the $A$ and $B$ parameters by maximizing the Pearson correlation coefficient $R$ and the $C$ parameter by minimizing mean absolute error (MAE)~\citep{Webster.2007} between the lidar and algorithm-retrieved snow depths. We varied $A$ between 1 and 3 by increments of 0.1, $B$ between 0 and 1 by increments of 0.1, and $C$ between 0 and 1 by increments of 0.01. Our new WUS-optimized parameter set is $A$~=~1.5, $B$~=~0.1, and $C$~=~0.59, and we used this parameter set in all subsequent analysis. We further investigated the relative impacts of these three tuning parameters on retrieved snow depth, a discussion of which is included in Appendix~\ref{appendix:optimization}.
+
+To ensure that we had effectively implemented the algorithm described in \citet{Lievens.2022}, we compared the snow depth maps produced for our study sites to corresponding snow depth maps produced as part of the \citet{Lievens.2022} effort, known as C-SNOW. These data are available by request at the C-SNOW data portal (https://ees.kuleuven.be/eng/apps/project-c-snow-data/). Across all study sites, average correlation between our snow depth maps and the \citet{Lievens.2022} snow depth maps was 0.64. Differing RTC processing applications (Alaska Satellite Facility's Hyp3 in this study vs. ESA Sentinel Application Platform (SNAP) toolbox used by \citet{Lievens.2022}) may partially explain this discrepancy. Additional differences may be explained by updates to the procedure used to generate the C-SNOW data data products which are not described in the published article (H. Lievens, Personal Communication, December 25, 2023). These updates include: averaging backscatter changes relative to the previous 6, 12, 18, and 24 days, using the wet snow flags to reduce wet snow-influenced snow depth changes, and different averaging weight vectors for calculating the previous snow index (see Appendix~\ref{appendix:algorithm} for a description of the snow index). When compared to lidar snow depth data, we found negligible differences in accuracy between the products produced using our open-source software and C-SNOW. Since the average correlation to the lidar across the nine sites was 0.003 higher for our retrievals relative to the provided data we continued with the open-source retrievals.
+
+\section{Results}
+
+\subsection{Algorithm performance} \label{sec:results.performance}
+
+Here we assess the performance of the S1 snow depth retrieval algorithm using root mean square error (RMSE) and $R$ to enable a comparison with the results reported in \citet{Lievens.2022}. Mean site-wide snow depth is variable across the lidar datasets; thus, we also use a normalized RMSE (nRMSE), produced by dividing the RMSE by the site-wide mean snow depth, to enable easier comparison across the sites. For all available measurements across all sites (n~=~60,245~pixels), the S1-derived snow depths have an RMSE of 0.92~m (nRMSE~=~68~\%) and a correlation value of $R$~=~0.46 when compared to lidar-derived snow depths (Table~\ref{table:results}). For individual study sites, RMSE ranges between 0.65--1.07~m (nRMSE between 57--83~\%) with correlation values between $R$~=~0.02--0.54. When pixels flagged as wet snow are removed from the comparison, RMSE and $R$ metrics slightly improve at some sites but decline at others (Table~\ref{table:results}).
+
+\begin{table}[htbp]
+\caption{RMSE and $R$ values for S1 snow depth retrievals as compared to lidar measurements for all pixels (All) and dry snow pixels only (Dry)}
+\label{table:results}
+\refstepcounter{table}
+%\begin{adjustbox}{width=\textwidth} % Adjust the table width to fit the page
+\begin{tabular}{|l|cc|cc|cc|c|}
+%\toprule
+\hline
+ & \multicolumn{2}{c|}{RMSE (m)} & \multicolumn{2}{c|}{$R$} & \multicolumn{2}{c|}{Bias} \\
+\hline
+%\cmidrule(lr){2-4} \cmidrule(lr){5-7}
+Site & All & Dry  & All & Dry  & All & Dry  \\
+\hline
+%\midrule
+All sites combined & 0.92 & 1.03 & 0.46 & 0.45 & -0.49 & -0.02 \\
+\hline % Thin horizontal line added
+Banner 2020 & 1.00 & 0.92 & 0.40 & 0.37 & -0.71 & -0.04 \\
+Banner 2021 & 0.89 & 1.14 & 0.42 & 0.49 & -0.19 & 0.23 \\
+Dry Creek 2020 & 0.74 & 0.78 & 0.21 & 0.24 & -0.43 & -0.43\\
+Fraser 2020 & 0.93 & 1.26 & 0.38 & 0.14 & -0.78 & 0.12\\
+Fraser 2021 & 0.65 & 0.79 & 0.18 & 0.44 & -0.45 & 0.26\\
+Little Cottonwood 2021 & 1.07 & 1.17 & 0.54 & 0.51 & -0.17 & 0.46\\
+Mores 2020 & 1.07 & 0.97 & 0.08 & 0.19 & -0.72 & -0.47\\
+Mores 2021 & 0.91 & 0.91 & 0.40 & 0.34 & -0.51 & -0.15\\
+Cameron 2021 & 1.07 & 1.03 & 0.02 & 0.46 & -0.86 & 0.06\\
+\hline
+%\bottomrule
+\end{tabular}
+%\end{adjustbox}
+\end{table}
+\clearpage
+
+Across pixels at all study sites, there is poor agreement between S1-retrieved snow depths and lidar snow depths, particularly where lidar snow depths are less than 1~m  (Figure~\ref{fig:violins_summary}a). For individual sites, snow depth distributions broadly fail to match the distributions of snow depth captured with lidar (Figure \ref{fig:violins_summary}b). While median S1 and lidar derived snow depths show agreement at some sites (e.g., Banner 2020 and 2021, Fraser 2020, lCC), at most other sites snow depth is strongly underestimated by the S1 retrieval (Table \ref{table:results}.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{figures/violins_summary.png}
+    \caption{a) Site-wise comparison of the distributions of lidar and S1 snow depths. b) pixel-wise log-scaled 2d histogram of lidar vs. S1 snow depths.}
+    \label{fig:violins_summary}
+\end{figure}
+
+We use the Banner 2021 site to qualitatively illustrate the differences between lidar and S1 snow depths (Figure~\ref{fig:banner_maps}). Banner 2021 has a relatively good agreement between S1 and lidar snow depths (RMSE~=~0.89, $R$~=~0.42) compared to the other sites. The spatial distribution of snow depth from lidar (Figure~\ref{fig:banner_maps}a) and S1 (Figure~\ref{fig:banner_maps}b) have a first order similarity, with deeper snow depths along the site's central ridge and shallower snow depths at lower elevations to the east and west. However, the S1 algorithm estimates shallower snow depth across considerable portions of the study area (brown in Figure~\ref{fig:banner_maps}c). This negative bias (S1 - Lidar) appears especially prevalent in lower elevation regions (Figure~\ref{fig:banner_maps}d) with higher FC (Figure~\ref{fig:banner_maps}e). Conversely, the algorithm overestimates snow depths in high elevation regions with less tree coverage. Lidar-derived snow depths generally change smoothly over the landscape, with more abrupt changes in snow depth coinciding with topographic features. In contrast, S1-derived snow depths are noisier, with abrupt snow depth changes that do not coincide spatially with topographic features. 
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{figures/banner_map_results.png}
+    \caption{From Banner 2021: a) Lidar snow depth, b) S1 snow depth, c) S1 snow depth bias, d) FC, e) elevation, and f) aspect angle}
+    \label{fig:banner_maps}
+\end{figure}
+
+We further explore algorithm performance at Banner 2021 within the context of differences in absolute snow depth (measured by lidar), FC, elevation, snow type (dry~vs.~wet), terrain aspect, and spatial resolution of the datasets (Figure~\ref{fig:violins_banner}). In general, pixels corresponding to a given lidar snow depth bin (e.g.,~0--1~m) have a substantially larger range of S1-retrieved snow depths (Figure~\ref{fig:violins_banner}a). Where lidar snow depth is shallower than 2~m, the S1 retrieval algorithm generally underestimates snow depth. Where lidar snow depth exceeds 2~m, the S1 snow depth retrieval mean more closely agrees with the lidar snow depth mean, but exhibits a considerably wider spread. S1 and lidar snow depths agree best in regions of moderate forest cover (25--75~\%), and errors increase in pixels with either very sparse or very dense vegetation, with higher FC leading to underestimated snow depth(Figure~\ref{fig:violins_banner}b). The elevation-dependent results in (Figure~\ref{fig:violins_banner}c) reinforce the spatial patterns visible in Figure~\ref{fig:banner_maps}, with better agreement at higher elevations and underestimated snow depth at lower elevations, although this may also be due to a correlation between elevation and FC at this site. Algorithm performance at Banner 2021 not vary considerably for wet vs. dry snow (Figure~\ref{fig:violins_banner}d), nor do we observe large variations with respect to terrain aspect (Figure~\ref{fig:violins_banner}e). Lastly, in accordance with \citet{Lievens.2022}, we find increased agreement between lidar and S1 snow depths at coarser spatial resolutions (Figure~\ref{fig:violins_banner}f). 
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{figures/violins_banner.png}
+    \caption{Distributions of lidar and retrieved snow depths at Banner 2021 subset by a) snow depth, b) FC, c) elevation, d) wet vs. dry snow, e) aspect, and f) spatial resolution. Values between the 1st--99th percentiles are incorporated into the distributions, while outliers beyond this range are indicated with blue or orange points.}
+    \label{fig:violins_banner}
+\end{figure}
+
+The impacts of changing snow depth, FC, elevation, aspect, and spatial resolution on retrieved SD accuracy at the other eight sites appear similar to the results shown for Banner 2021 (Figure~\ref{fig:nrmse}). In general, nRMSE is lowest in regions with deeper snow, moderate FC, and higher elevation. We also note decreasing nRMSE at coarser spatial resolutions across all sites (Figure \ref{fig:nrmse}e).
+
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{figures/relative_error.png}
+    \caption{Site-by-site nRMSEs along with grouped mean nRMSE for all sites for bins of a) lidar snow depth, b) FC, c) elevation quantile, d) aspect, and e) spatial resolution. Elevation was normalized between 0 and 1 at each site to improve comparison of the intra-site trends.}
+    \label{fig:nrmse}
+\end{figure}
+
+
+\subsection{S1 cross ratio (CR)} \label{sec:results.cr}
+
+Despite tuning the S1-retrieval algorithm to lidar-derived snow depths (see Appendix~\ref{appendix:optimization}), snow depths obtained using the algorithm do not agree well with the nine lidar datasets. We consider two possible explanations for this poor agreement, which are not necessarily mutually exclusive. First, the algorithm structure, with its three empirical parameters, is not appropriate for application over the WUS. Second, the underlying S1 data does not provide sufficient information for estimating snow depth (i.e. there is no S1 snow depth signal). To investigate this second explanation, we compared a time series of the site-wide mean S1 CR ($\gamma^0_{\mathrm{VH}} - \gamma^0_{\mathrm{VV}}$) with a timeseries of measured snow depth from the nearest SNOTEL station for each site (Figure~\ref{fig:cross_ratio_allsites}). A visual comparison reveals a positive correlation between the two variables at most sites (e.g., Banner~2021 and Mores~2020) with little to no relationship at a few sites (e.g., Dry Creek~2020 and Fraser~2020). At some sites, the correlation is weak at the beginning of the accumulation season and becomes stronger as the season progresses (e.g., Little~Cottonwood~2021). Separately, we compare the CR signal to lidar snow depth by integrating $\Delta$CR through time from the first S1 image acquisition date with IMS snow coverage to the date of the lidar survey at each site (Figure~\ref{fig:cross_ratio_boxplots}). We find that across all pixels at all sites there is a positive correlation between cumulative $\Delta$CR and snow depth for snow depths exceeding 2~m, but a weak or even negative correlation for snow depths shallower than 1.5~m. 
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{figures/cross_ratio_all_sites.png}
+    \caption{Timeseries of site-wide mean S1 cross ratio ($\gamma^0_{\mathrm{VH}} - \gamma^0_{\mathrm{VV}}$, blue lines) and measured snow depth from the nearest SNOTEL site (black lines) for all sites. Note that the length of the timeseries varies between sites.}
+    \label{fig:cross_ratio_allsites}
+\end{figure}
+
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.6\textwidth]{figures/cross_ratio_summary.png}
+    \caption{Time-integrated change in cross ratio ($\Delta$CR) for different snow depths across all pixels and sites.}
+    \label{fig:cross_ratio_boxplots}
+\end{figure}
+\clearpage
+
+\section{Discussion}
+
+\subsection{Snow depth retrieval accuracy}
+
+%% from HP message: add correlations >1.5 m in open areas
+
+Across all pixels and study sites, we find that the S1 backscatter algorithm proposed by \citet{Lievens.2022} captures some of the snow depth spatial distribution ($R=0.46$; Table \ref{table:results}), but struggles with estimating appropriate magnitudes of snow depth (RMSE$=0.92$~\unit~{m}, nRMSE$=68$\%). Three sites have correlations below 0.2, four sites have RMSE values $>1$~m, and all sites have nRMSE values greater than 50~\% of their site-wide mean snow depths. Only one site (Cottonwood 2021) has a correlation coefficient exceeding 0.5 and one site (Frasier 2021) has an RMSE lower than 0.7~m. Unfavorable sites, such as Cameron 2021 and Mores 2020, have $R$ values as low as 0.02 and 0.08, respectively. While errors improve at coarser spatial resolutions (Figure \ref{fig:nrmse}e), nRMSE values range between 31--74~\% across all sites, even at the coarsest 1000~m resolution. At sites with deeper snow depths (e.g. Banner 2021, Little Cottonwood 2021), the S1 retrieval algorithm appears to capture first-order spatial patterns in snow depth, despite meter-scale RMSEs. 
+
+To better understand the algorithm application, we explored the effects of various environmental and geophysical variables on S1 snow depth retrieval accuracy (Figures~\ref{fig:violins_banner} and~\ref{fig:nrmse}). For all sites, nRMSE decreases with increasing snow depth. This improved performance in deeper snow is expected due to increased volume scattering and correspondingly higher signal-to-noise ratio (SNR). When we compare S1 and lidar-derived snow depth in dry snow across all sites (Figure~\ref{fig:violins_summary}a), we find little to no correlation below lidar snow depths of approximately 1.5~m, with an improved correlation for deeper snow. We also note decreasing nRMSE with increasing elevation, though we expect considerable correlation between snow depth and elevation across our sites. 
+
+At C-band wavelengths, SAR signals primarily interact with layers within the snowpack rather than individual snow grains ~\citep{Naderpour.2022, Tsang.2022}. While in most cases snow depth is likely correlated with volume scattering from snow layers, other factors controlling the snowpack's structural characteristics additionally impact volume scattering. Spatiotemporal variability of snowpack structure (i.e. faceted grains, ice layers) that is not correlated with snow depth is an important source of uncertainty that may contribute to the poor overall performance of the snow depth retrieval algorithm. 
+
+The effects of FC on algorithm performance are complicated (Figure~\ref{fig:nrmse}b), with high errors occurring in areas with dense forest cover (i.e.,~FC~$>75$\%). Dense vegetation cover is typically associated with elevated levels of SAR volume scattering~\citep{Vreugdenhil.2020}. As such, a strong vegetation volume scattering signal may overwhelm a weaker signal due to increasing snow depth. Indeed, nRMSE values decrease with decreasing FC down to approximately 35~\%. However, errors increase again when FC drops below 30~\%. This decline in retrieval performance for sparse tree coverage is unexpected, as 1) previous research found performance improvements with decreasing forest cover \citep{Lievens.2022} and 2) decreasing volume scattering from non-snow sources is expected to improve the snow-related SNR. This observed decline in performance is potentially caused by very deep snow pixels at high elevations where forest cover is sparse. All deep snow outliers ($>3$~m) are located where FC is low, most with being below 10~\% FC. The retrieval algorithm is optimized for mean snow depths ($\sim$1--2~m), so algorithm performance likely degrades in extreme snow depth cases. As such, we interpret poor retrieval algorithm performance for low FC values to be caused by algorithm design rather than low SNR.
+
+Terrain aspect influences snow deposition and melting, with east-facing sloped receiving more wind-deposited snow in the WUS, and and south and west-facing slopes receiving more direct solar radiation in the Northern hemisphere. Therefore we might expect degraded performance on south aspects (wet snow) and improved performance on east aspects (deeper snow), but average nRMSE values across all sites does not vary substantially across aspect angles (Figure~{\ref{fig:nrmse}d}). nRMSE curves for individual sites vary drastically in shape, with differences likely caused by complex interactions between satellite incidence angle, FC, and wet snow effects. The specific impacts of aspect on algorithm performance are still unclear and a potential investigation for future work.
+
+Recent work by \citet{Broxton.2024} showed a marked performance increase when excluding wet snow flagged pixels. Therefore, algorithm performance was expected to decline substantially for wet snow-flagged pixels. In wet snow, maximum penetration depth of incident C-band radiation is on the order of 10~cm \citep{Casey.2016}, which attenuates the signal and prevents the volume scattering that occurs in dry snow. Unexpectedly, we found that algorithm performance did not improve across all sites when pixels flagged as wet snow were masked (Table~\ref{table:results}, Figure~\ref{fig:violins_banner}d). The results from Table~\ref{table:results} suggest that the wet snow flag in the algorithm is not correctly separating wet snow from dry or refrozen snow. Additionally, there may be non-snow scattering mechanisms in shallow snowpacks that trigger the wet snow flag when the snow present is actually dry. For more details on wet snow considerations, see Appendix~\ref{appendix:optimization}2.  
+
+We finally consider the effect of spatial resolution on algorithm performance. We find that at 90~m spatial resolution, S1 snow depth retrievals have meter-scale RMSEs, suggesting limited utility for accurately capturing snow depth at this resolution across our WUS domain. Coarser resolution S1 retrievals show better agreement (nRMSE = 0.50, r = 0.47 at 1km) with similarly-resampled lidar measurements (Figure \ref{fig:nrmse}e), suggesting that the algorithm is better suited for providing large-scale information about snow patterns that may be valuable for water resource managers and hydrologic modeling. As horizontal resolution coarsens, nRMSE decreases up to 300--500~m, after which improvements level off. This improvement at coarser resolutions may be related to the relatively subtle C-band snow volume scattering signal compared to background noise from orbital errors, SAR speckle, variations in ground and vegetation properties, and other sources. 
+
+However, we note that these spatial resolution results need to be interpreted carefully, as 1) spatial averaging decreases the standard deviation and sample size of the S1 snow depth distribution, which can artificially decrease RMSE, and 2) algorithm parameter fits may be improved as the lidar and S1 snow depth distributions are spatially averaged. ``Snow Index'' values from the S1 retrieval algorithm are converted to snow depth by scaling with the single $C$ parameter, which was optimized by minimizing MAE between the S1 and lidar snow depth data across all sites. Meanwhile, spatial averaging brings individual pixel values closer to the mean values of the distributions, oversimplifying important spatial patterns of snow depth distribution but improving the fit of the $C$ parameter to the S1-derived Snow Index and lidar snow depth data. While simplification of the data via spatial averaging may improve the model fit to the data, this does not necessarily indicate underlying correlation between the two datasets, only that two simple surfaces can be more easily fit together than two complex surfaces using a single empirical parameter. Thus, improvements in algorithm performance with decreasing spatial resolution must be interpreted as a potential artifact of the particular error metric and algorithm structure.  
+
+Overall, these results suggest that S1 snow retrievals agree best with lidar snow depth measurements in regions with snowpacks deeper than 1.5~m, moderate FC ($\sim$35\%), and spatial resolutions between 500--1000~m, a set of conditions generally in accordance with ~\citet{Lievens.2022}. Even under these ideal conditions, nRMSE values for all sites exceed 40~\%, well above the 10~\% target at 100~m spatial resolution set in the National Academy of Sciences 2017--2027 Decadal Survey (NASEM, 2018)\nocite{Sciences.2018}. Nonetheless, no current satellited-based operational snow depth product exists. Even the proposed Ku-and X-band missions from NASA and the Canadian Space Agency will saturate at $\sim$1--2~m snow depth~\cite{Tsang.2022}. Continued exploration to improve this technique is warranted, especially focused on areas of deeper snow ($>$1.5~m). 
+
+%Significant sources of error likely include ineffective flagging of wet snow, low SNR in shallow snow, spatiotemporal variability of snow structure unrelated to snow depth, volume scattering from changing vegetation, layover and radar shadow, and an underparameterized algorithm resulting in a poor fit to the S1 data.
+
+\subsection{Cross ratio time series}
+
+To provide context for our evaluation of S1 snow depth retrieval accuracy, we performed a brief exploration of the CR time series for each of our study sites. We found that CR appears to be correlated with SNOTEL snow depth at some sites (e.g. Banner 2021, Little Cottonwood 2021, and Mores 2020 and 2021) correlated only in mid-late winter at other sites (e.g. Banner 2020, Cameron 2021, and Fraser 2021), and uncorrelated at others (e.g. Dry Creek 2020 and Fraser 2020). We note that sites with deeper snow depths tended to exhibit the strongest qualitative correlation between CR and snow depths. These results suggest that while there likely is snow depth information in the S1 CR, there is large spatial and temporal variability in the snow depth SNR. In early winter, snow wetness may obscure a weak snow depth signal at some sites. Ideally, S1 retrieval algorithms should only be applied where snow depth signal is detectable. Even with additional sources of snow depth information, identifying these periods in real-time will be a challenge and time-series analysis may be required along with ancillary modeled, higher-frequency SAR, or optical datasets. 
+
+We further compared the spatial mean of time-integrated $\Delta$CR with lidar snow depth data. We found that snow depths below 1.5~m do not appear to cause a detectable increase in S1 volume scattering over the time leading up to the lidar acquisition at our study sites, which likely explains poor retrieval algorithm performance in shallow snow and contribute to poor early-season performance of the algorithm at some study sites. These results suggest that S1 CR data may be a potential source of information in deep snow ($>$1.5~m), but that snow depth retrieval algorithms using only S1 data will not be reliable until snow depths reach a threshold close to 1.5~m. Where maximum snow depths are shallower, or snow is wet, the S1 CR may not provide useful snow depth information. 
+
+\subsection{Limitations and future work}
+
+Interpretation of algorithm performance is complicated by a poor understanding of the underlying physical processes and scattering mechanisms that affect the CR. If the time-integrated CR signal contains information related to changing snow depth at the surface, the snow-related effects are subtle and difficult to untangle in shallow snowpacks (Figures~\ref{fig:cross_ratio_allsites} and~\ref{fig:cross_ratio_boxplots}). However, the S1 algorithm we evaluated has no method to indicate where snow depths have surpassed this minimum snow depth threshold, and instead requires in situ data to identify those regions where future changes in the CR signal may be related to changes in snow depth. This is a significant challenge for global application of the algorithm, where vast snow-covered regions do not have in situ data available for reference. Future algorithm development should integrate additional data sources (e.g., passive microwave satellite data, future higher frequency SAR approaches, interferometric SAR approaches, or physically-based snow accumulation models) to derive snow depth changes early in the accumulation season.
+
+While incremental improvements to the algorithm may be still be possible with additional analysis, parameter tuning, or improved ancillary datasets, perhaps more important is a better understanding of the physical mechanisms controlling the CR signal. This is beyond the scope of a single study and will likely require an iterative approach that considers modeling efforts, laboratory or small-scale field studies, and satellite data. In tandem with future investigations into the CR signal, we advocate for the development of novel approaches for harnessing the snow information that may be present in C-band SAR data. More effective algorithms could incorporate results from radiative transfer models, which would allow for more detailed explorations of potentially covariated scattering mechanisms related to vegetation, snow wetness, and soil properties. Alternatively, machine learning approaches, including physics-informed neural networks, may result in more accurate snow depth retrievals from S1 data and provide insights that guide subsequent modeling and field studies. Lastly, the algorithm presented here has known differences when compared to \citet{Lievens.2022} due to the closed-source nature of their work. Until the original code is released in an open-source framework, additional development and improvements from the larger snow remote sensing community will be hindered.
+
+\conclusions  %% \conclusions[modified heading if necessary]
+
+In this study we present a independent evaluation of a promising S1 volume scattering-based snow depth retrieval algorithm proposed by~\citet{Lievens.2022}. We developed an open-source Python package implementing a version of the algorithm ~\citep{Hoppinen.2023} and compared S1 snow depth retrieval algorithm results to nine mid-winter lidar snow depth retrievals over the WUS collected for the NASA SnowEx campaign. Over all study sites, we find that S1 snow depths agree poorly with lidar snow depths, with a mean RMSE of 0.92~m and a mean correlation of 0.46. We find moderate improvements in algorithm performance in deeper ($>$1.5~m) snow and FC around 35~\%; however, even under these ideal conditions mean nRMSE is 40~\%, above the 10~\% target at 100~m spatial resolution set in the National Academy of Sciences 2017--2027 Decadal Survey (NASEM, 2018)\nocite{Sciences.2018}. 
+
+To help explain algorithm performance, we briefly explore the S1 CR time series data that the algorithm relies on. We find that the S1 CR is visually correlated with snow depth at some sites, though this correlation sometimes only begins in mid-late winter. We find a significant relationship between snow depth and CR signal above $\sim$1.5~m but no detectable positive time-integrated change in S1 CR for snow depths less than $\sim$1.5~m. We therefore attribute poor algorithm performance partly to lack of information in the CR when the snow SNR is very low, and partly due to algorithm structure, which fails to reliably convert change in S1 CR to snow depth where SNR is high. 
+
+Given the inconsistent nature of the snow depth signal in S1 CR data, we recommend that algorithms using these data integrate other sources of snow depth information to identify conditions where S1 data are likely to be useful. Future efforts would benefit from improved understanding of the physical mechanisms controlling the interaction between spaceborne C-band radar measurements and the snow-covered landscape. At the same time, more complex empirical algorithms or machine learning approaches may be able to more accurately translate changes in S1 backscatter to snow depth. Measuring global snow depth and SWE from space will require a synergistic approach including various remote sensing techniques, modeling approaches, and in situ data sources. While questions remain how to best utilize S1 for snow depth, we believe C-band SAR remote sensing products will be a valuable tool in monitoring global snowpacks.
+
+%% The following commands are for the statements about the availability of data sets and/or software code corresponding to the manuscript.
+%% It is strongly recommended to make use of these sections in case data sets and/or software code have been part of your research the article is based on.
+
+\codeavailability{The repository for running Sentinel-1 snow depth retrievals using this algorithm is available at: github.com/SnowEx/spicy-snow. Analysis and figure creation code is available at: github.com/ZachHoppinen/spicy-analysis} %% use this section when having only software code available
+
+
+%\dataavailability{TEXT} %% use this section when having only data sets available
+
+
+%\codedataavailability{TEXT} %% use this section when having data sets and software code available
+
+
+%\sampleavailability{TEXT} %% use this section when having geoscientific samples available
+
+
+%\videosupplement{TEXT} %% use this section when having video supplements available
+
+
+\appendix
+\section{Sentinel-1 Snow Depth Retrieval Algorithm Details}\label{appendix:algorithm}
+
+The retrieval algorithm relies on the assumption that no snow exists on the surface at the beginning of the timeseries (we use August 1st for the Northern Hemisphere). Snow depth is calculated iteratively by attributing increases in backscatter to increases in snow depth. The IMS snow presence dataset)~\citep{NSIDC.2008} is incorporated to avoid misattributing backscatter changes from other non-snow factors. Snow depth at each pixel is set to zero until the IMS dataset indicates snow presence, and snow depth is also set to zero after melt-out. 
+
+The primary S1 input to the snow depth retrieval algorithm is the cross-ratio of co- and cross-polarized backscatter. The cross-ratio is calculated at every valid pixel ($i$) over all available image acquisitions ($t$) by taking the ratio of VH to VV backscatter in a linear scale, or equivalently by subtracting VH from VV in a logarithmic [dB] scale:
+\begin{equation} \label{equation:gammaCR}
+    \gamma^0_{CR} (i, t) = A \gamma^0_{\mathrm{VH}} (i, t) - \gamma^0_{\mathrm{VV}} (i, t)
+\end{equation}
+where $A$ is an empirical fitting parameter used to control the relative weight of the VH backscatter to VV. 
+
+Next, two backscatter change variables are calculated between the image at the current timestep ($t$) and the prior timestep ($t_{\mathrm{pri}}$). Depending on the study site and orbit geometries, the time elapsed between $t$ and $t_{\mathrm{pri}}$ can be 6, 12, 18, or 24 days. The change in the cross-polarized to co-polarized backscatter ratio ($\Delta \gamma^0_{\mathrm{CR}}$) is given by
+\begin{equation} \label{equation:deltaCR}
+    \Delta \gamma^0_{\mathrm{CR}} (i, t) = \gamma^0_{\mathrm{CR}} (i, t) - \gamma^0_{\mathrm{CR}} (i, t_{\mathrm{pri}})
+\end{equation}
+and the change in the co-polarized backscatter ($\Delta \gamma^0_{\mathrm{VV}}$) is given by 
+\begin{equation} \label{equation:deltaVV}
+    \Delta \gamma^0_{\mathrm{VV}} (i, t) = \gamma^0_{\mathrm{VV}} (i, t) - \gamma^0_{\mathrm{VV}} (i, t_{\mathrm{pri}})
+\end{equation}
+
+Vegetation causes significant cross-polarized backscatter that may obscure the snow-depth related signal. Consequently, a weighted combination of $\Delta \gamma^0_{\mathrm{VV}}$ and $\Delta \gamma^0_{\mathrm{CR}}$ is implemented using the forest cover fraction ($FC$, bounded between 0 and 1): 
+\begin{equation} \label{equation:deltagamma}
+    \Delta \gamma^0 (i, t) = (1 - FC(i)) \cdot \Delta \gamma^0_{\mathrm{CR}} (i, t) + B \cdot FC(i) \cdot \Delta \gamma^0_{\mathrm{VV}} (i, t)q   
+\end{equation}
+This weighted combination is parameterized by the second empirical fitting parameter $B$ that controls the relative influence of the co-polarized backscatter change on the final snow depth retrievals. To remove outliers, we masked pixels in the result of~(\ref{equation:deltagamma}) with backscatter changes more than $+$3~dB and less than $-$3~dB.
+
+A snow change index ($SI$, units of dB) captures changes in $\Delta \gamma^0$ over time, taking in information from multiple previous snow indexes and snow coverage data from the IMS. The algorithm is initiated with $SI$ set to 0 for all pixels, and $SI=0$ as long as the IMS dataset indicates no snow presence. Once snow presence is indicated, a previous snow index is calculated that takes the weighted average of the snow indexes centered around the last time step from the same orbital geometry (6 or 12 days ago) combined with the snow indexes from around that previous time step (+- 5 days or +- 11 days) (Equation \ref{equation:previousSI}) with weights that are the inverse distance in days between the previous time step and that image’s acquisition date (Equation \ref{equation:previousweights}).
+
+\begin{equation} \label{equation:previousSI}
+    SI (i, t_{pri}) = \frac{1}{w} \sum^{t_{pri} + RI - 1 }_{t_{image} = t_{pri} - RI + 1} w \times SI(i, t_{image}) ; RI \in 6, 12, 18, 24 [\text{days}]
+\end{equation}
+
+and $w$ given by:
+
+\begin{equation}\label{equation:previousweights}
+    w = \begin{cases} 
+      [1..6..1]  & RI = 6 \\
+      [1..12..1]  & RI = 12 \\
+      [1..24..1]  & RI = 24
+   \end{cases}
+\end{equation}
+
+For example, an image captured on January 30th in an orbital geometry that captures an image every 6 days ($RI = 6$) would multiply all the previously calculated snow indexes from January 19th to 29th (January 24th $\pm$ 5 days) by the repeat interval minus number of days separating each images from the previous image acquisition date (January 24th) so a vector of [1, 2, 3, 4, 5, 6, 5, 4, 3, 2, 1]. This sum would then be divided by that same vector with days without images removed to get the previous snow index.
+
+The current time step’s $\Delta \gamma^0$ is then added to this previous snow index to calculate the current snow index. If the currently calculated snow index is negative it is set to zero for this time step (Equation \ref{equation:snowindex}).
+
+\begin{equation} \label{equation:snowindex}
+    SI (i, t) =  \begin{cases} 
+      \text{max}(0, [SI(i, t_{pri}) + \Delta \gamma^0])  & IMS = \text{Snow} \\
+      0  & IMS = \text{No Snow}
+   \end{cases}
+\end{equation}
+
+Next, we convert the current snow index in dB to snow depth in meters by multiplying it by the parameter $C$ (Equation \ref{equation:si2sd}). $C$ controls the increase of snow depth correlated with increasing backscatter and was varied between 0 to 1 in increments of 0.01.
+
+\begin{equation} \label{equation:si2sd}
+    SD (i, t) = C * SI (i, t)
+\end{equation}
+
+Finally, a binary wet snow flag is applied with the intention to identify changes in backscatter due to wetting of the snow (causing a strong decrease) or refreezing (causing a strong increase) instead of changes in snow depth. Since different orbit geometries have different local incidence angles and acquire data at different times of the day (06:00 and 18:00 LT), the wet snow flag is only calculated for changes between images of the same orbital geometry. Additionally, once a pixel has been flagged as wet it continues to be wet until a refreezing event occurs at that pixel.
+
+A pixel is flagged as wet if the cross polarized ratio drops by more than 2 dB (wet snow threshold) from the previous image with the same orbital geometry for a pixel with less than 50\% FC, or if the co-polarized backscatter drops by more than 2 dB for pixels with greater than 50\% FC. This wet snow flag persists for that orbital geometry until an increase of 1 dB (freeze snow threshold) in the cross-polarized ratio (for regions of FC $<$ 50\%) or co-polarized ratio (FC $>$ 50\%) is observed, after which point the pixel is flagged as dry until the next drop in backscatter is observed (Equation \ref{equation:wetflag}).
+
+An "alternate wet snow flag" is also applied if $SI$ drops below zero in a region where the IMS still indicates snow presence, which attempts to capture snow wetness in regions of shallow or patchy snow cover or highly vegetated areas.
+
+
+\begin{equation} \label{equation:wetflag}
+    \text{Wet Flag} (i, t) =  \begin{cases} 
+      \text{wet} & \Delta \gamma_{CR/VV}^0 (i, t) < - 2~\text{dB} \\
+      \text{wet} & \text{Wet Flag}(i, t_{pri}) = \text{wet}; \Delta \gamma_{CR/VV}^0 (i, t) < + 1 \text{dB} \\
+      \text{wet} & SI (i, t) < 0; IMS (i, t) = \text{Snow} \\
+      \text{dry} & t = \text{August 1st} \\
+      \text{dry} & \Delta \gamma_{CR/VV}^0 (i, t) > + 1~\text{dB} \\
+      \text{dry} & \text{Wet Flag} (i, t_{pri}) = \text{dry}; \Delta \gamma_{CR/VV}^0 (i, t) > - 2~\text{dB}
+   \end{cases}
+\end{equation}
+
+After February 1st, if a pixel was flagged as wet for 50\% or more of the previous 4 observations from the same orbital geometry, we consider the snowpack to be permanently wet at that location and flag as wet the remainder of the time series until the next August 1st.
+
+\section{Parameter Optimization}~\label{appendix:optimization}
+
+\subsection{Parameter Importance}
+
+The optimal parameter values for our WUS validation dataset are $A=1.5$, $B=0.1$, and $C=0.59$. Of these three parameters, changing $C$ has the largest impact on RMSE ($\frac{\partial \text{RMSE}}{\partial A}$=0.207, $\frac{\partial \text{RMSE}}{\partial B}$=0.176, $\frac{\partial \text{RMSE}}{\partial C}$=0.908, Table \ref{table:parameters}). Because $C$ is used as a scaling parameter in (\ref{equation:snow_depth_change}), it has no impact on $R$. Modifying $B$ has a larger impact on scene-wide $R$ values than does changing $A$ ($\frac{\partial \text{R}}{\partial A}$ = 0.035, $\frac{\partial \text{R}}{\partial B}$ = 0.101). However, when considering only pixels with FC $<25 \%$, changing $A$ has a larger impact on $R$ and RMSE. In contrast, $B$ increases in importance for high FC pixels.  
+
+\begin{table}[htbp]
+\refstepcounter{table}
+\label{table:parameters}
+% \begin{adjustbox}{width=\textwidth} % Adjust the table width to fit the page
+\begin{tabular}{|l|l|l|l|}
+\hline
+%\rowcolor{white}
+\multicolumn{4}{|c|}{\textbf{Table \ref{table:parameters}: Parameter Sensitivity}} \\
+\hline
+& \textbf{All Pixels} & \textbf{\textless{}25\% FC} & \textbf{\textgreater{}75\% FC} \\
+\hline
+$\partial$ RMSE / $\partial$ A & 0.207 & 0.454 & 0.144 \\
+$\partial$ RMSE / $\partial$ B & 0.176 & 0.019 & 0.367 \\
+$\partial$ RMSE / $\partial$ C & 0.908 & 1.871 & 0.412 \\ \hline
+$\partial$ $R$  / $\partial$ A & 0.035 & 0.047 & 0.030 \\
+$\partial$ $R$  / $\partial$ B & 0.101 & 0.013 & 0.226 \\
+$\partial$ $R$  / $\partial$ C & 0.000 & 0.000 & 0.000 \\
+\hline
+\end{tabular}
+% \end{adjustbox}
+\end{table}
+
+We use the Banner 2021 validation dataset to further illustrate the sensitivity of the S1 snow depth retrievals to the three parameters (Figure \ref{fig:banner_params}a-c). Changes in the $B$ and $C$ parameter have approximately linear effects on the change in mean scene-wide snow depth, with changes to $C$ impacting the snow depth retrieval the greatest. Changes in $A$ were generally linear until $\approx$0.5m where minimal snow depth changes were observed for further decreases in $A$.  Increasing the $A$ parameter primarily impacts higher elevation areas with lower FC (Figure \ref{fig:banner_params}d), while increasing $B$ results in increased snow depths in lower elevation forested regions and actually causes slight a snow depth decrease in the less forested regions (Figure \ref{fig:banner_params}e). Modifying the scaling parameter $C$ affects all pixels, with the largest changes in regions with the greatest retrieved snow depths.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{figures/appendix_parameters.png}
+    \caption{Percent change in scene-wide mean snow depth with varying A, B, and C parameters from optimized values (A = 1.5, B = 0.1, C = 0.59) for the Banner Summit 2021 site (a-c). Changes in S1 snow depth retrievals when increasing each parameter by 0.5 from the optimal value and keeping the other parameters at their optimal value (d-f).}
+    \label{fig:banner_params}
+\end{figure}
+
+We found that the $C$ parameter has the greatest impact on RMSE (Table \ref{table:parameters}) and total retrieved snow depth (Figure \ref{fig:banner_params}), indicating that $C$ is the most important parameter to optimize if minimizing scene-wide RMSE the primary consideration. Since $C$ simply scales values in the final step of the retrieval, this parameter can be optimized efficiently and should be adjusted first when applying this technique at a new site.
+
+The $A$ and $B$ parameters had a much lower impact on scene-wide RMSE but controlled the spatial and temporal distribution of error. As such, practitioners optimizing these two parameters should evaluate the environmental characteristics of areas with high RMSE. Optimizing $B$ may be most important in areas with greater forest cover, while conversely, optimizing $A$ may be more important in high-elevation areas with low forest cover. Importantly, A and B are not independent. Varying one will cause the other to be mis-optimized, highlighting a potential weakness of this empirical model. A potential avenue to lower RMSE across a scene with varied environmental characteristics could be to apply two implementations of the algorithm, one optimized for areas with dense forest cover and another optimized for alpine areas with sparse vegetation.
+
+While we did not evaluate the impact of outliers on parameter optimization, visual examination of 2021 S1 snow depth results at the Banner study site shows isolated areas of extreme snow depth along a rugged ridgeline at the center of the site (Figure~\ref{fig:banner_maps}b). These extreme outliers in snow depth likely caused a decrease in C parameter to and a corresponding decrease in snow depths in other areas, potentially introducing a negative bias in the S1 snow depth results. These outliers are also visible in (Figure \ref{fig:violins_summary}b) with some outliers over 4+ meters apparent in the S1 retrievals but no in the lidar. To mitigate this issue, it may be advantageous to perform parameter optimization on a high-confidence subset of the radar data, within elevation bands, or after outlier removal.
+
+\subsection{Wet snow parameters}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{figA4.png}
+    \caption{Binned mean normalized RMSEs (a \& c) and fraction of dry pixels (b \& d) for permutations of the newly wet and freezing thresholds and with (top row) and without (bottom row) the alternative wet snow flagging for the Banner 2021 lidar flight.}
+    \label{fig:wet_snow_params}
+\end{figure}
+
+
+
+%\begin{landscape}
+\begin{figure}
+    \centering
+    \includegraphics[width=16cm]{figA5.png}
+    \caption{Time series of snow classifications for the 2020-2021 winter at the Banner study site (a) with no snow (white), dry snow (light blue), wet snow (dark blue). Number of dry vs. wet snow pixels in the scene from August 2020 to August 2021 (b), and temperature and snow depth values from the Banner Summit SNOTEL (c).}
+    \label{fig:banner_wet_snow}
+\end{figure}
+%\end{landscape}
+%
+
+The S1 algorithm has increased uncertainty over areas with wet snow~\citep{Lievens.2022}, which is why careful consideration must be taken to optimize the wet snow parameters to accurately classify wet snow. The three wet snow parameters described in \ref{appendix:algorithm} (wet snow threshold, freeze snow threshold, and alternate wet snow flag) were not systematically optimized by~\citet{Lievens.2022}. When attempting to optimize these parameters to minimize scene-wide RMSE, we found that no global optimum exists. Instead, we found that by increasing both the wet snow threshold and freeze snow threshold, RMSE decreases at the expense of a reduced number of retrieved snow depths as more pixels are masked out. This tradeoff is visualized in Figure \ref{fig:wet_snow_params}.
+
+During our analysis we found the original freeze snow threshold of $+$2dB to be overly conservative: pixels that we expect to refreeze remain wet throughout the entire winter season, despite air temperatures dropping well below freezing. We noted a jump in backscatter in these pixels, but not enough to satisfy the $+$2dB threshold. Similar considerable (but not quite $+$2dB) jumps in VV backscatter during refreezing events were also observed by~\citet{Lund.2022}. The $+$1dB freeze snow threshold we implemented resulted in a more realistic match with SNOTEL temperatures (Figure~\ref{fig:banner_wet_snow}). Our selected parameters of a wet snow threshold of -3~dB, a freezing threshold of +2~dB, and choosing to keep the alternate wet snow flag enabled provide a good compromise that results in an effective wet snow mask without overmasking to artificially boost algorithm performance.
+
+With our optimized wet snow flagging parameters, the time series of wet snow and dry snow pixels matches well with the temperature and snow depth trends observed at the Banner Summit SNOTEL site (Figure~\ref{fig:banner_wet_snow}). The spatial progression of melt agrees well with the SNOTEL temperature and snow depth measurements. Wet snow is observed in the early accumulation season (October through early December) when warmer daytime temperatures and mixed phase precipitation occur. Then, as daytime temperatures progressively cool, water within the snowpack freezes and dry snow precipitation increases, expanding dry snow extent in the colder winter months (mid December through early March). Finally, warmer spring temperatures and increased shortwave radiation introduce surface melt in the snowpack, turning dry snow to wet snow beginning in mid-March until the snow melts away. This progression also coincides well with elevation: at Banner Creek, snow at lower elevations is more often observed as wet, and snow at higher elevations is more often observed as dry. 
+
+Though we make these recommendations for wet snow parameters, end users will have to make a final selection of parameter values that consider both local conditions as well as retrieval quality vs retrieval quantity. In this way, it is important to treat the wet snow parameter value selection just as carefully as the A, B, and C parameter value selection. Additionally, it is important to remember that this algorithm should only be used in the accumulation season \citep{Tsang.2022}. Though the pixels flagged as wet snow can often follow reasonable snow depth trends, we suggest caution in the interpretation of these pixels, as changes in snow depth are likely not due to changes in volume scattering as prescribed in the algorithm.
+
+\noappendix       %% use this to mark the end of the appendix section. Otherwise the figures might be numbered incorrectly (e.g. 10 instead of 1).
+
+%% Regarding figures and tables in appendices, the following two options are possible depending on your general handling of figures and tables in the manuscript environment:
+
+%% Option 1: If you sorted all figures and tables into the sections of the text, please also sort the appendix figures and appendix tables into the respective appendix sections.
+%% They will be correctly named automatically.
+
+%% Option 2: If you put all figures after the reference list, please insert appendix tables and figures after the normal tables and figures.
+%% To rename them correctly to A1, A2, etc., please add the following commands in front of them:
+
+\appendixfigures  %% needs to be added in front of appendix figures
+
+\appendixtables   %% needs to be added in front of appendix tables
+
+%% Please add \clearpage between each table and/or figure. Further guidelines on figures and tables can be found below.
+
+
+
+\authorcontribution{Conceptualization: ZH, HPM, GB, RP. Writing: ZH, RP, JT, GB, EG, DD, AM, HPM Analysis: ZH, RP, GB, DD, EG, AM, RB. Repository: ZH, RP, GB, EG. Funding Acquisition: HPM. Planning: ZH, HPM. Editing: ZH, HPM, GB, RP, JT, DD} %% this section is mandatory
+
+\competinginterests{The authors report they have no competing interests.} %% this section is mandatory even if you declare that no competing interests are present
+
+%\disclaimer{TEXT} %% optional section
+
+\begin{acknowledgements}
+We wish to thank Dr. Tate Meehan for his suggestion of repository name. Dr. Joe Meyer for sharing SnowModel data for the East River Basin. Emma Marshall for helping with implementing the algorithm using Xarray.
+\end{acknowledgements}
+
+\codeavailability{The code for producing the S1 derived snow depths is available at: 
+ https://github.com/SnowEx/spicy-snow. Code for producing the figures and analysis is available at: https://github.com/ZachHoppinen/spicy-analysis.}
+
+\financialsupport{Lidar acquisitions and HM was supported by NASA grant 80NSSC21K0408. JT was supported by an appointment to the NASA Postdoctoral Program at the Goddard Space Flight Center (GSFC), administered by ORAU through a contract with NASA.}
+
+\clearpage
+\bibliographystyle{copernicus}
+\bibliography{My_Library}
+
+\end{document}
